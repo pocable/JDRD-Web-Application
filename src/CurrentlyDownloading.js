@@ -1,5 +1,6 @@
 import React from 'react';
 import {Card, ListGroup} from 'react-bootstrap';
+import CurrentDownloadListItem from './CurrentDownloadListItem';
 
 
 export default class CurrentlyDownloading extends React.Component{
@@ -28,7 +29,7 @@ export default class CurrentlyDownloading extends React.Component{
             }).then(data => {
                 var items = []
                 for(var x in data){
-                    items.push((<ListGroup.Item>{data[x]['title']} <br></br> {data[x]['path']} - {x}</ListGroup.Item>))
+                    items.push((<CurrentDownloadListItem key={x} rdid={x} title={data[x]['title']} path={data[x]['path']}/>))
                 }
                 this.setState({'curDownload': items});
             }
