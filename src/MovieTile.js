@@ -1,6 +1,10 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 
+/*
+TODO: Add maybe image. Need class grid.
+*/
+
 export default class MovieTile extends React.Component{
 
     state = {'title': 'Missing Title Data', 'seeders': '128', 'link': 'magnet:?xt=urn:btih:add4f96bc50daf48572bbd213928df41a8328727&dn=Tremors.3.Ritorno.A.Perfection.(2001).1080p.H264.Ita.Eng.Ac3.Sub.Ita.NUEng-MIRCrew.mkv&xl=3395915170&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.pirateparty.gr:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://tracker.leechers-paradise.org:6969/announce&tr=udp://tracker.eddie4.nl:6969/announce&tr=udp://shadowshq.yi.org:6969/announce&tr=udp://shadowshq.eddie4.nl:6969/announce&tr=udp://inferno.demonoid.pw:3391/announce&tr=udp://eddie4.nl:6969/announce&tr=udp://9.rarbg.to:2730/announce&tr=udp://9.rarbg.com:2710/announce&tr=udp://9.rarbg.me:2780/announce&tr=udp://62.138.0.158:6969/announce&tr=udp://151.80.120.114:2710/announce'}
