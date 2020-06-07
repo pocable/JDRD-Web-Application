@@ -21,10 +21,10 @@ export default class CurrentlyDownloading extends React.Component{
     }
 
     getCurrentDownloads(){
-        fetch('http://192.168.0.38:4248/api/v1/content/all', {
+        fetch(process.env.REACT_APP_DLAPI_LINK + 'api/v1/content/all', {
             method: 'get',
             headers: new Headers({
-                'Authorization': 'ccbce173ee8b1e0ad838dc4198ee15ff9f0b0e1cfe07f964201cab0a11b4e9e8',
+                'Authorization': process.env.REACT_APP_DLAPI_API_KEY,
                 'Content-Type': 'application/json'
             })
             }).then(response => {

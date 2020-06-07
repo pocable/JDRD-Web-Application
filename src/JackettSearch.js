@@ -31,9 +31,11 @@ export default class JackettSearch extends React.Component{
         if(this.state.tvCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.tvCategories);}
 
 
-        var api_key = "jeancf9pxd5jqy8mpwe6k2b2gz9dnio8";
+        var api_key = process.env.REACT_APP_JACKETT_API_KEY;
         var limit = 300;
-        var link = `http://192.168.0.38:9117/api/v2.0/indexers/ettv/results/torznab?apikey=${api_key}&cat=${chosenCategories.join(',')}&t=search&limit=${limit}&q=${encodeURIComponent(this.state.formSearchQuery)}`;
+        var link = process.env.REACT_APP_JACKETT_LINK + `api/v2.0/indexers/ettv/results/torznab?apikey=${api_key}&cat=${chosenCategories.join(',')}&t=search&limit=${limit}&q=${encodeURIComponent(this.state.formSearchQuery)}`;
+        console.log(link);
+        console.log(process.env.REACT_APP_DLAPI_LINK)
         fetch(link).then(response => {
             console.log(response.status);
             return response.text();
