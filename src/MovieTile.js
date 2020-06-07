@@ -3,10 +3,6 @@ import {Button} from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import MetadataRequestWindow from './MetadataRequestWindow';
 
-/*
-NEED LINK TITLE SEEDERS AND PATH
-*/
-
 export default class MovieTile extends React.Component{
 
     state = {'errorState': false, 'message': '', 'askForMeta': false}

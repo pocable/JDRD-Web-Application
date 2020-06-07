@@ -6,11 +6,8 @@ import JackettSearch from './JackettSearch';
 import {Container, Row, Col} from 'react-bootstrap';
 
 /*
-Currently Downloading list works good.
-TODO: work on a search button with a child of a grid which holds each search result.
-Each search result has a title, seeders and maybe more information from jackett ?? (see API)
-Each item will have a button to download. Each item will look like a card. Use movie Tile.
-
+TODO: CORS issue with Jackett, can add a fix to DLAPI as a proxy or use other
+software. DLAPI proxy is probably what I will be doing.
 */
 
 export default class App extends React.Component{
