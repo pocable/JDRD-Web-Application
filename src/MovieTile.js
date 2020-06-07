@@ -1,47 +1,88 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
+import ErrorMessage from './ErrorMessage';
+import MetadataRequestWindow from './MetadataRequestWindow';
 
 /*
-TODO: Add maybe image. Need class grid.
+NEED LINK TITLE SEEDERS AND PATH
 */
 
 export default class MovieTile extends React.Component{
 
-    state = {'title': 'Missing Title Data', 'seeders': '128', 'link': 'magnet:?xt=urn:btih:add4f96bc50daf48572bbd213928df41a8328727&dn=Tremors.3.Ritorno.A.Perfection.(2001).1080p.H264.Ita.Eng.Ac3.Sub.Ita.NUEng-MIRCrew.mkv&xl=3395915170&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.pirateparty.gr:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://tracker.leechers-paradise.org:6969/announce&tr=udp://tracker.eddie4.nl:6969/announce&tr=udp://shadowshq.yi.org:6969/announce&tr=udp://shadowshq.eddie4.nl:6969/announce&tr=udp://inferno.demonoid.pw:3391/announce&tr=udp://eddie4.nl:6969/announce&tr=udp://9.rarbg.to:2730/announce&tr=udp://9.rarbg.com:2710/announce&tr=udp://9.rarbg.me:2780/announce&tr=udp://62.138.0.158:6969/announce&tr=udp://151.80.120.114:2710/announce'}
-    DEFAULT_PATH = "/media/noPathSet/"
+    state = {'errorState': false, 'message': '', 'askForMeta': false}
 
     constructor(props){
         super(props);
-        this.downloadMovie = this.downloadMovie.bind(this);
+        this.onErrorClosed = this.onErrorClosed.bind(this);
+        this.downloadWithMeta = this.downloadWithMeta.bind(this);
+        this.cancelModal = this.cancelModal.bind(this);
+        this.download = this.download.bind(this);
+        this.downloadButtonPressed = this.downloadButtonPressed.bind(this);
     }
 
-    downloadMovie(){
+    downloadWithMeta(showName, seasonNumber){
+        this.download(this.props.path + "tv/" + showName + "/" + seasonNumber + "/")
+        this.setState({'askForMeta': false});
+    }
+
+    cancelModal(){
+        this.setState({'askForMeta': false});
+    }
+
+    download(path){
+        console.log('Submitting download to path: ' + path);
         fetch('http://192.168.0.38:4248/api/v1/content', {
             method: 'post',
             headers: new Headers({
-                'Authorization': 'ccbce173ee8b1e0ad838dc4198ee15ff9f0b0e1cfe07f964201cab0a11b4e9e8',
-                'Content-Type': 'application/json'
+                'Authorization': 'ccbce173ee8b1e0ad838dc4198ee15ff9f0b0e1cfe07f964201cab0a11b4e9e8'
             }),
             body: JSON.stringify({
-                'magnet_url': this.state.link,
-                'title': this.state.title,
-                'path': this.DEFAULT_PATH
+                'url': this.props.link,
+                'title': this.props.title,
+                'path': path
             })
-            }).then(response => {
-                console.log(response.status);
-                console.log(response);
+        }).then(response => {
+            if(response.status !== 200){
+                this.setState({'errorState': true, 'message': 'Recieved ' + response.status})
+            }
         });
+    }
+
+    downloadButtonPressed(){
+        if(this.props.isTV){
+            this.setState({'askForMeta': true});
+            return;
+        }else{
+            this.download(this.props.path + 'movies/')
+        }
+    }
+
+    onErrorClosed(){
+        this.setState({'errorState': false});
     }
 
 
     render(){
+        var meta;
+        if(this.state.askForMeta){
+            meta = (<MetadataRequestWindow downloadWithMeta={this.downloadWithMeta} cancelModal={this.cancelModal}/>);
+        }
+
+        var errorBubble;
+        if(this.state.errorState){
+            errorBubble = (<ErrorMessage title="Error Downloading Movie" message={this.state.message} onClosed={this.onErrorClosed}/>)
+        }
+
         return (
-            <div className="movieTile">
-                <Button variant="secondary" onClick={this.downloadMovie}>
-                    <h4>{this.state.title}</h4>
-                    <p>{this.state.seeders}</p>
+            <>
+                {errorBubble}
+                {meta}
+                <Button variant="secondary" size="lg" block onClick={this.downloadButtonPressed}>
+                    <h4>{this.props.title}</h4>
+                    <a href={this.props.link}>Direct URL</a>
+                    <p>Seeders: {this.props.seeders}</p>
                 </Button>
-            </div>
+            </>
         );
     }
 }

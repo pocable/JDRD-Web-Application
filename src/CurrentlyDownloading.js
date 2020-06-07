@@ -15,6 +15,9 @@ export default class CurrentlyDownloading extends React.Component{
 
     componentDidMount(){
         this.getCurrentDownloads();
+        setInterval(async () => {
+            this.getCurrentDownloads();
+        }, 5000);
     }
 
     getCurrentDownloads(){
@@ -41,7 +44,7 @@ export default class CurrentlyDownloading extends React.Component{
             <div className='CurrentDownloads'>
                 <Card>
                     <Card.Header>
-                        Current Downloads
+                        Current RealDebrid Downloads
                     </Card.Header>
                     <ListGroup variant="flush">
                         {this.state.curDownload}

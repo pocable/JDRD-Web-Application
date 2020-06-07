@@ -29,7 +29,7 @@ export default class CurrentDownloadListItem extends React.Component{
             })
             }).then(response => {
                 if(response.status === 200){
-                   this.setState({'deleted': true});
+                    this.setState({'deleted': true});
                 }else{
                     console.error('Status code returned was: ', response.status);
                     this.setState({'deleteError': true, 'statusCode': response.status});
