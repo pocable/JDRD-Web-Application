@@ -16,7 +16,7 @@ REACT_APP_JACKETT_API_KEY = INSERT KEY HERE
 Since these are environment variables set them when deploying. This system only communicates with API's so no paths are needed.
 
 ## Setup
-Comming soon, this will have a docker container like [DLAPI](https://github.com/Pocable/DLAPI).
+Coming soon, this will have a docker container like [DLAPI](https://github.com/Pocable/DLAPI).
 
 ## Screenshot
 ![Main UI](UIIMG.PNG?raw=true)
