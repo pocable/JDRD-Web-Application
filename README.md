@@ -16,3 +16,6 @@ REACT_APP_JACKETT_API_KEY = INSERT KEY HERE
 
 ## Setup
 Comming soon, this will have a docker container like [DLAPI](https://github.com/Pocable/DLAPI).
+
+## Screenshot
+![Main UI](UIIMG.PNG?raw=true)
