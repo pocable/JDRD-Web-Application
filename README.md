@@ -17,7 +17,7 @@ REACT_APP_CORS_PROXY = INSERT CORS URL PROXY HERE (code format is REACT_APP_CORS
 Since these are environment variables set them when deploying. This system only communicates with API's so no paths are needed.
 
 ## Setup
-Use the [docker file](https://hub.docker.com/repository/docker/pocable/jdrd-web-application) provided to make it easier, otherwise do the following steps:
+Use the [docker container](https://hub.docker.com/repository/docker/pocable/jdrd-web-application) provided to make it easier, otherwise do the following steps:
 * Edit: Makefile to point to an environment file
 * Run: make build
 * Run: make run
