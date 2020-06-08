@@ -18,12 +18,9 @@ export default class JackettSearch extends React.Component{
         this.toggleMovieCheckbox = this.toggleMovieCheckbox.bind(this);
     }
 
-
-    // TODO: Search jackett for the information like DLAPI
     searchJackett(event){
         // Change to template string
         event.preventDefault();
-        console.log(this.state);
         this.setState({'searchDisabled': true});
 
         var chosenCategories = [];
@@ -33,11 +30,13 @@ export default class JackettSearch extends React.Component{
 
         var api_key = process.env.REACT_APP_JACKETT_API_KEY;
         var limit = 300;
-        var link = process.env.REACT_APP_JACKETT_LINK + `api/v2.0/indexers/ettv/results/torznab?apikey=${api_key}&cat=${chosenCategories.join(',')}&t=search&limit=${limit}&q=${encodeURIComponent(this.state.formSearchQuery)}`;
+        var link = process.env.REACT_APP_CORS_PROXY + process.env.REACT_APP_JACKETT_LINK + `api/v2.0/indexers/ettv/results/torznab?apikey=${api_key}&cat=${chosenCategories.join(',')}&t=search&limit=${limit}&q=${encodeURIComponent(this.state.formSearchQuery)}`;
         console.log(link);
-        console.log(process.env.REACT_APP_DLAPI_LINK)
-        fetch(link).then(response => {
-            console.log(response.status);
+        fetch(link, {
+            headers: new Headers({
+                'Authorization': process.env.REACT_APP_DLAPI_API_KEY,
+            })
+        }).then(response => {
             return response.text();
         }).then(str => {
             return (new window.DOMParser()).parseFromString(str, "text/xml");

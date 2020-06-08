@@ -12,6 +12,7 @@ REACT_APP_DLAPI_LINK = INSERT LINK HERE
 REACT_APP_DLAPI_API_KEY = INSERT KEY HERE
 REACT_APP_JACKETT_LINK = INSERT LINK HERE
 REACT_APP_JACKETT_API_KEY = INSERT KEY HERE
+REACT_APP_CORS_PROXY = INSERT CORS URL PROXY HERE (format is REACT_APP_CORS_PROXY + URL)
 ```
 Since these are environment variables set them when deploying. This system only communicates with API's so no paths are needed.
 
