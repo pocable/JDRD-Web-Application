@@ -33,10 +33,10 @@ export default class CurrentlyDownloading extends React.Component{
 
     // Get a list of items DLAPI is currently processing for download
     getCurrentDownloads(){
-        fetch(process.env.REACT_APP_DLAPI_LINK + 'api/v1/content/all', {
+        fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/content/all', {
             method: 'get',
             headers: new Headers({
-                'Authorization': process.env.REACT_APP_DLAPI_API_KEY,
+                'Authorization': window._env_.REACT_APP_DLAPI_API_KEY,
                 'Content-Type': 'application/json'
             })
             }).then(response => {
@@ -52,7 +52,7 @@ export default class CurrentlyDownloading extends React.Component{
 
                 // Issue polling server, clear interval and report error.
                 console.error(exp)
-                this.setState({'errorState': true, 'errorMessage': 'DLAPI may be offline or inaccessible. Double check that "' + process.env.REACT_APP_DLAPI_LINK + 'api/v1/content/all" is a valid URL to DLAPI.'})
+                this.setState({'errorState': true, 'errorMessage': 'DLAPI may be offline or inaccessible. Double check that "' + window._env_.REACT_APP_DLAPI_LINK + 'api/v1/content/all" is a valid URL to DLAPI.'})
                 clearInterval(this.interval)
             });
     }
