@@ -19,7 +19,6 @@
 .env.production.local
 
 # Environment
-.env
 backup.env
 env-config.js
 /public/env-config.js
