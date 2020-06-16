@@ -5,11 +5,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import JackettSearch from './JackettSearch';
 import {Container, Row, Col} from 'react-bootstrap';
 
-/*
-TODO: CORS issue with Jackett, can add a fix to DLAPI as a proxy or use other
-software. DLAPI proxy is probably what I will be doing.
-*/
-
 export default class App extends React.Component{
 
   render(){

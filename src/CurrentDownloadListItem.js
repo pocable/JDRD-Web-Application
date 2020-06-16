@@ -18,10 +18,10 @@ export default class CurrentDownloadListItem extends React.Component{
     }
 
     cancelDownload(){
-        fetch(process.env.REACT_APP_DLAPI_LINK +'api/v1/content', {
+        fetch(window._env_.REACT_APP_DLAPI_LINK +'api/v1/content', {
             method: 'delete',
             headers: new Headers({
-                'Authorization': process.env.REACT_APP_DLAPI_API_KEY,
+                'Authorization': window._env_.REACT_APP_DLAPI_API_KEY,
                 'Content-Type': 'application/json'
             }),
             body: JSON.stringify({

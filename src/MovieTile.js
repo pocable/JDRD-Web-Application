@@ -27,10 +27,10 @@ export default class MovieTile extends React.Component{
 
     download(path){
         console.log('Submitting download to path: ' + path);
-        fetch(process.env.REACT_APP_DLAPI_LINK + 'api/v1/content', {
+        fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/content', {
             method: 'post',
             headers: new Headers({
-                'Authorization': process.env.REACT_APP_DLAPI_API_KEY
+                'Authorization': window._env_.REACT_APP_DLAPI_API_KEY
             }),
             body: JSON.stringify({
                 'url': this.props.link,
