@@ -1,10 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {ListGroup, Button, Modal} from 'react-bootstrap';
-import PropTypes from 'prop-types';
 
+/**
+ * An object representing an item currently being downloaded by DLAPI
+ * @see CurrentlyDownloading
+ * @version 1.0.0
+ */
 export default class CurrentDownloadListItem extends React.Component{
 
     state = {'title': '', 'path': '', 'rd_code': '', 'deleted': false, 'deleteError': false, 'statusCode': ''}
+    
+    static propTypes = {
+        /** The real debrid ID of the item. */
+        rdid: PropTypes.string,
+
+        /** The title of the item. */
+        title: PropTypes.string,
+
+        /** The storage path of where the item will be downloaded into on JDownloader. */
+        path: PropTypes.string
+    }
 
     
     constructor(props){
@@ -17,6 +33,9 @@ export default class CurrentDownloadListItem extends React.Component{
         this.setState({'deleteError': false});
     }
 
+    /**
+     * Cancels the download by sending a delete request to DLAPI.
+     */
     cancelDownload(){
         fetch(window._env_.REACT_APP_DLAPI_LINK +'api/v1/content', {
             method: 'delete',
@@ -61,9 +80,3 @@ export default class CurrentDownloadListItem extends React.Component{
         );
     }
 }
-
-CurrentDownloadListItem.propTypes = {
-    rdid: PropTypes.string,
-    path: PropTypes.string,
-    title: PropTypes.string
-};
