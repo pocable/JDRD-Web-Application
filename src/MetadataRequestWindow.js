@@ -1,15 +1,29 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {Modal, Button, Form} from 'react-bootstrap';
 
 /**
- * Props:
- * downloadWithMeta: function which takes in
- * cancelModel: When the cancel button is hit, return.
- */
-
+  * Window popup form to request TV show metadata.
+  * @version 1.0.0
+  */
 export default class MetadataRequestWindow extends React.Component{
 
     state = {'seriesCheckbox': 'on', 'seasonCheckbox': 'off', 'seasonNumber': '', 'showName': ''}
+
+    static propTypes = {
+
+        /** 
+         * Function called with showName and seasonNumber as parameters. 
+         * 
+         * @param {string} showName The TV show name grabbed.
+         * @param {string} seasonNumber The TV show season number 
+         */
+        downloadWithMeta: PropTypes.func,
+
+        /** Function called when the request window is closed. */
+        cancelModal: PropTypes.func
+    }
+
     constructor(props){
         super(props);
         this.submit = this.submit.bind(this);
@@ -25,11 +39,11 @@ export default class MetadataRequestWindow extends React.Component{
         this.props.downloadWithMeta(this.state.showName, this.state.seasonNumber);
     }
 
-    toggleSeriesCheckbox(event){
+    toggleSeriesCheckbox(){
         this.setState({'seriesCheckbox': 'on', 'seasonCheckbox': 'off'});
     }
 
-    toggleSeasonCheckbox(event){
+    toggleSeasonCheckbox(){
         this.setState({'seasonCheckbox': 'on', 'seriesCheckbox': 'off'});
     }
 
@@ -61,8 +75,8 @@ export default class MetadataRequestWindow extends React.Component{
                         </Form.Group>
                         <fieldset>
                             <Form.Group>
-                                <Form.Check inline type="radio" name="formHor" onChange={this.toggleSeriesCheckbox} defaultChecked label="Entire Series Pack" />
-                                <Form.Check inline type="radio" name="formHor" onChange={this.toggleSeasonCheckbox} label="Season Pack" />
+                                <Form.Check inline type="radio" name="formHor" onChange={this.toggleSeriesCheckbox} defaultChecked label="Multiple Seasons" />
+                                <Form.Check inline type="radio" name="formHor" onChange={this.toggleSeasonCheckbox} label="Specific Season" />
                             </Form.Group>
                         </fieldset>
                         {this.state.seasonCheckbox === 'on' &&

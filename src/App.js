@@ -5,6 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import JackettSearch from './JackettSearch';
 import {Container, Row, Col} from 'react-bootstrap';
 
+/**
+ * Entrypoint for JDRD web. Overall page formatting is declared here.
+ * @version 1.0.0
+ */
 export default class App extends React.Component{
 
   render(){

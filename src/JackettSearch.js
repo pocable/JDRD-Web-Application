@@ -2,11 +2,16 @@ import React from 'react';
 import {Form, Button, ButtonToolbar} from 'react-bootstrap';
 import MovieTile from './MovieTile'
 
+/**
+ * A form which searches jackett and puts the results into a button toolbar
+ * @version 1.0.0
+ */
 export default class JackettSearch extends React.Component{
 
-    // TODO: Stop button from refreshing the page.
-
     state = {'searchResults': [], 'formSearchQuery': '', 'searchDisabled': false, 'tvCheckbox': 'off', 'movieCheckbox': 'on'}
+    
+    // These categories are according to jackett and other torrenting websites.
+    // Here we could include anime under tv but I will not be doing that.
     tvCategories = [5000,5010,5030,5040,5045,5050,5060,5070,5080];
     movieCategories = [2000,2010,2020,2030,2040,2045,2050,2060,2070,2080];
 
@@ -23,11 +28,13 @@ export default class JackettSearch extends React.Component{
         event.preventDefault();
         this.setState({'searchDisabled': true});
 
+        // Get all of the chosen categories into a list
         var chosenCategories = [];
         if(this.state.movieCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.movieCategories);}
         if(this.state.tvCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.tvCategories);}
 
 
+        // Format the link that we need to query
         var api_key = window._env_.REACT_APP_JACKETT_API_KEY;
         var limit = 300;
         var link = window._env_.REACT_APP_CORS_PROXY + window._env_.REACT_APP_JACKETT_LINK + `api/v2.0/indexers/ettv/results/torznab?apikey=${api_key}&cat=${chosenCategories.join(',')}&t=search&limit=${limit}&q=${encodeURIComponent(this.state.formSearchQuery)}`;
@@ -53,11 +60,11 @@ export default class JackettSearch extends React.Component{
         });
     }
 
-    toggleTvCheckbox(event){
+    toggleTvCheckbox(){
         this.setState({'tvCheckbox': 'on', 'movieCheckbox': 'off'});
     }
 
-    toggleMovieCheckbox(event){
+    toggleMovieCheckbox(){
         this.setState({'movieCheckbox': 'on', 'tvCheckbox': 'off'});
     }
 

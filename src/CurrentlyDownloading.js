@@ -3,7 +3,11 @@ import {Card, ListGroup} from 'react-bootstrap';
 import CurrentDownloadListItem from './CurrentDownloadListItem';
 import ErrorMessage from './ErrorMessage';
 
-
+/**
+ * List display of items currently being downloaded by DLAPI.
+ * @see CurrentDownloadListItem
+ * @version 1.0.0
+ */
 export default class CurrentlyDownloading extends React.Component{
 
       
@@ -31,7 +35,9 @@ export default class CurrentlyDownloading extends React.Component{
         this.setState({'errorState': false})
     }
 
-    // Get a list of items DLAPI is currently processing for download
+    /**
+     * Get a list of items DLAPI is currently processing for download
+     */
     getCurrentDownloads(){
         fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/content/all', {
             method: 'get',

@@ -1,11 +1,31 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {Button} from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import MetadataRequestWindow from './MetadataRequestWindow';
 
+/**
+ * An object representing a movie, currently a button.
+ * Responsible for submitting a download and visualizing a movie.
+ * @version 1.0.0
+ */
 export default class MovieTile extends React.Component{
 
     state = {'errorState': false, 'message': '', 'askForMeta': false}
+
+    static propTypes = {
+        /** The main download location path (contains subfolders tv and movies). */
+        path: PropTypes.string,
+
+        /** The URL/magnet link of the show. */
+        link: PropTypes.string,
+
+        /** The title of the show. */
+        title: PropTypes.string,
+        
+        /** If the displayed item is a TV show or not. */
+        isTv: PropTypes.bool
+    }
 
     constructor(props){
         super(props);
@@ -16,6 +36,11 @@ export default class MovieTile extends React.Component{
         this.downloadButtonPressed = this.downloadButtonPressed.bind(this);
     }
 
+    /**
+     * Submit the URL prop for downloading on DLAPI with the tv path.
+     * @param {string} showName The show name.
+     * @param {string} seasonNumber The season number / representation.
+     */
     downloadWithMeta(showName, seasonNumber){
         this.download(this.props.path + "tv/" + showName + "/" + seasonNumber + "/")
         this.setState({'askForMeta': false});
@@ -25,6 +50,10 @@ export default class MovieTile extends React.Component{
         this.setState({'askForMeta': false});
     }
 
+    /**
+     * Submit the URL prop for downloading on DLAPI to the path provided.
+     * @param {string} path The path provided to download to. 
+     */
     download(path){
         console.log('Submitting download to path: ' + path);
         fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/content', {
@@ -75,7 +104,6 @@ export default class MovieTile extends React.Component{
                 {meta}
                 <Button variant="secondary" size="lg" block onClick={this.downloadButtonPressed}>
                     <h4>{this.props.title}</h4>
-                    <a href={this.props.link}>Direct URL</a>
                     <p>Seeders: {this.props.seeders}</p>
                 </Button>
             </>
