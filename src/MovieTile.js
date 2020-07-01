@@ -3,15 +3,16 @@ import PropTypes from 'prop-types'
 import {Button} from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import MetadataRequestWindow from './MetadataRequestWindow';
+import ConfirmWindow from './ConfirmWindow';
 
 /**
  * An object representing a movie, currently a button.
  * Responsible for submitting a download and visualizing a movie.
- * @version 1.0.0
+ * @version 1.0.1
  */
 export default class MovieTile extends React.Component{
 
-    state = {'errorState': false, 'message': '', 'askForMeta': false}
+    state = {'errorState': false, 'message': '', 'askForMeta': false, 'confirmState': false, 'confirmMessage': ''}
 
     static propTypes = {
         /** The main download location path (contains subfolders tv and movies). */
@@ -34,6 +35,8 @@ export default class MovieTile extends React.Component{
         this.cancelModal = this.cancelModal.bind(this);
         this.download = this.download.bind(this);
         this.downloadButtonPressed = this.downloadButtonPressed.bind(this);
+        this.onConfirmClicked = this.onConfirmClicked.bind(this);
+        this.onConfirmClosed = this.onConfirmClosed.bind(this);
     }
 
     /**
@@ -75,11 +78,10 @@ export default class MovieTile extends React.Component{
 
     downloadButtonPressed(){
         if(this.props.isTV){
-            this.setState({'askForMeta': true});
+            this.setState({'askForMeta': true, 'confirmState': false});
             return;
-        }else{
-            this.download(this.props.path + 'movies/')
         }
+        this.setState({'confirmState': true, 'confirmMessage': 'Download ' + this.props.title + '?'});
     }
 
     onErrorClosed(){
@@ -87,10 +89,27 @@ export default class MovieTile extends React.Component{
     }
 
 
+    // Called on the confirm dialogue.
+    onConfirmClicked(){
+        this.download(this.props.path + 'movies/')
+        this.setState({'confirmState': false});
+    }
+
+    onConfirmClosed(){
+        this.setState({'confirmState': false});
+    }
+
+
     render(){
-        var meta;
+
+        // Can use same var since if its TV it will metadata request else if its a movie its a confirm window.
+        var popup;
         if(this.state.askForMeta){
-            meta = (<MetadataRequestWindow downloadWithMeta={this.downloadWithMeta} cancelModal={this.cancelModal}/>);
+            popup = (<MetadataRequestWindow downloadWithMeta={this.downloadWithMeta} cancelModal={this.cancelModal}/>);
+        }
+
+        if(!this.props.isTV && this.state.confirmState){
+            popup = (<ConfirmWindow message={this.state.confirmMessage} onConfirm={this.onConfirmClicked} onCancel={this.onConfirmClosed}/>)
         }
 
         var errorBubble;
@@ -101,7 +120,7 @@ export default class MovieTile extends React.Component{
         return (
             <>
                 {errorBubble}
-                {meta}
+                {popup}
                 <Button variant="secondary" size="lg" block onClick={this.downloadButtonPressed}>
                     <h4>{this.props.title}</h4>
                     <p>Seeders: {this.props.seeders}</p>

@@ -16,24 +16,38 @@ export default class ConfirmWindow extends React.Component{
         onConfirm: PropTypes.func,
 
         /** The function to call when closed. */
-        onClose: PropTypes.func
+        onCancel: PropTypes.func
+    }
+
+    constructor(props){
+        super(props);
+        this.onConfirmPressed = this.onConfirmPressed.bind(this);
+        this.onClosePressed = this.onClosePressed.bind(this);
+    }
+
+    onClosePressed(){
+        this.props.onCancel();
+    }
+
+    onConfirmPressed(){
+        this.props.onConfirm();
     }
 
     render(){
         return (
             <Modal
             show={true}
-            onHide={this.props.onClose}
+            onHide={this.onClosePressed}
         >
-            <Modal.Header closeButton>
+            <Modal.Header>
                 <Modal.Title>Confirmation</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {this.props.message}
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="success" onClick={this.props.onConfirm}>Confirm</Button>
-                <Button variant="danger" onClick={this.props.onClose}>Close</Button>
+                <Button variant="success" onClick={this.onConfirmPressed}>Confirm</Button>
+                <Button variant="danger" onClick={this.onClosePressed}>Close</Button>
             </Modal.Footer>
         </Modal>
         )

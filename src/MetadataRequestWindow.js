@@ -4,7 +4,7 @@ import {Modal, Button, Form} from 'react-bootstrap';
 
 /**
   * Window popup form to request TV show metadata.
-  * @version 1.0.0
+  * @version 1.0.1
   */
 export default class MetadataRequestWindow extends React.Component{
 
@@ -62,7 +62,7 @@ export default class MetadataRequestWindow extends React.Component{
     render(){
         return (
         <>
-            <Modal show={true} onHide={() => {}}>
+            <Modal show={true} onHide={this.cancelModal}>
                 <Modal.Header>
                     <Modal.Title>Metadata Required</Modal.Title>
                 </Modal.Header>
@@ -88,8 +88,8 @@ export default class MetadataRequestWindow extends React.Component{
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={this.submit}>Submit</Button>
-                    <Button variant="secondary" onClick={this.cancelModal}>Cancel</Button>
+                    <Button variant="success" onClick={this.submit}>Download</Button>
+                    <Button variant="danger" onClick={this.cancelModal}>Cancel</Button>
                 </Modal.Footer>
             </Modal>
         </>
