@@ -7,7 +7,7 @@ import {Container, Row, Col} from 'react-bootstrap';
 
 /**
  * Entrypoint for JDRD web. Overall page formatting is declared here.
- * @version 1.0.0
+ * @version 1.0.1
  */
 export default class App extends React.Component{
 
