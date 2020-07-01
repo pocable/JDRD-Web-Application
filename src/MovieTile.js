@@ -4,11 +4,13 @@ import {Button} from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import MetadataRequestWindow from './MetadataRequestWindow';
 import ConfirmWindow from './ConfirmWindow';
+import ScaleText from "react-scale-text";
+
 
 /**
  * An object representing a movie, currently a button.
  * Responsible for submitting a download and visualizing a movie.
- * @version 1.0.1
+ * @version 1.0.2
  */
 export default class MovieTile extends React.Component{
 
@@ -121,9 +123,11 @@ export default class MovieTile extends React.Component{
             <>
                 {errorBubble}
                 {popup}
-                <Button variant="secondary" size="lg" block onClick={this.downloadButtonPressed}>
-                    <h4>{this.props.title}</h4>
-                    <p>Seeders: {this.props.seeders}</p>
+                <Button variant="secondary" size="lg" block onClick={this.downloadButtonPressed} title={this.props.title}>
+                    <ScaleText>
+                        <h4>{this.props.title}</h4>
+                        <p>Seeders: {this.props.seeders}</p>
+                    </ScaleText>
                 </Button>
             </>
         );
