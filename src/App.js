@@ -24,6 +24,7 @@ export default class App extends React.Component{
           <Row>
             <Col sm={4} md>
               <CurrentlyDownloading />
+              <br></br>
             </Col>
             <Col sm={8} md> 
               <JackettSearch />

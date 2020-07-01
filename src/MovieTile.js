@@ -4,6 +4,7 @@ import {Button} from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import MetadataRequestWindow from './MetadataRequestWindow';
 import ConfirmWindow from './ConfirmWindow';
+import { Textfit } from 'react-textfit';
 
 
 /**
@@ -123,7 +124,10 @@ export default class MovieTile extends React.Component{
                 {errorBubble}
                 {popup}
                 <Button variant="secondary" size="lg" block onClick={this.downloadButtonPressed} title={this.props.title}>
-                    <h4>{this.props.title}</h4>
+                    <Textfit>
+                        {this.props.title}
+                    </Textfit>
+
                     <p>Seeders: {this.props.seeders}</p>
                 </Button>
             </>
