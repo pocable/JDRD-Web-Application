@@ -14,7 +14,7 @@ export default class App extends React.Component{
   render(){
     return (
       <div className="App">
-        <Container>
+        <Container fluid>
           <Row>
             <Col>
             <h1>JDRD Web Downloader</h1>
@@ -22,10 +22,10 @@ export default class App extends React.Component{
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col sm={4} md>
               <CurrentlyDownloading />
             </Col>
-            <Col>
+            <Col sm={8} md> 
               <JackettSearch />
             </Col>
           </Row>
