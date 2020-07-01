@@ -4,7 +4,6 @@ import {Button} from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import MetadataRequestWindow from './MetadataRequestWindow';
 import ConfirmWindow from './ConfirmWindow';
-import ScaleText from "react-scale-text";
 
 
 /**
@@ -124,10 +123,8 @@ export default class MovieTile extends React.Component{
                 {errorBubble}
                 {popup}
                 <Button variant="secondary" size="lg" block onClick={this.downloadButtonPressed} title={this.props.title}>
-                    <ScaleText>
-                        <h4>{this.props.title}</h4>
-                        <p>Seeders: {this.props.seeders}</p>
-                    </ScaleText>
+                    <h4>{this.props.title}</h4>
+                    <p>Seeders: {this.props.seeders}</p>
                 </Button>
             </>
         );
