@@ -74,7 +74,7 @@ export default class CurrentlyDownloading extends React.Component{
                 {errorBubble}
                 <Card>
                     <Card.Header>
-                        Current RealDebrid Downloads
+                        Current DLAPI Tracked Downloads
                     </Card.Header>
                     <ListGroup variant="flush">
                         {this.state.curDownload}
