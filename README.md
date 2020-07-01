@@ -1,5 +1,6 @@
 # JDRD Web Application
 A web version of [JDRD](https://github.com/Pocable/JDRD) to run in browser for easy adding.
+Note: Please only use this for grabbing legal backups. I am not responsible for what you do with this.
 
 ## Features over JDRD
 * List of items currently being downloaded by Real Debrid
