@@ -1,10 +1,11 @@
 import React from 'react';
-import {Form, Button, ButtonToolbar} from 'react-bootstrap';
+import {Form, Button} from 'react-bootstrap';
 import MovieTile from './MovieTile'
+import SearchResultBox from './SearchResultBox';
 
 /**
  * A form which searches jackett and puts the results into a button toolbar
- * @version 1.0.0
+ * @version 1.0.1
  */
 export default class JackettSearch extends React.Component{
 
@@ -75,8 +76,8 @@ export default class JackettSearch extends React.Component{
     render(){
         return (
             <div className="jackettsearch">
-                <Form onSubmit={this.searchJackett}>
-                    <Form.Group controlId="basicSearch">
+                <Form onSubmit={this.searchJackett} className='BorderBox'>
+                    <Form.Group controlId="basicSearch" className='SearchBorder'>
                         <Form.Control plaintext autoComplete="off" value={this.state.formSearchQuery} onChange={this.updateText}  placeholder="Enter a movie or tv show name" />
                     </Form.Group>
                     <fieldset>
@@ -90,9 +91,7 @@ export default class JackettSearch extends React.Component{
                     </Button>
                 </Form>
                 <br></br>
-                <ButtonToolbar vertical={1}>
-                    {this.state.searchResults}
-                </ButtonToolbar>
+                <SearchResultBox tiles={this.state.searchResults}/>
             </div>
         );
     }
