@@ -6,7 +6,7 @@ import ErrorMessage from './ErrorMessage';
 /**
  * List display of items currently being downloaded by DLAPI.
  * @see CurrentDownloadListItem
- * @version 1.0.0
+ * @version 1.0.1
  */
 export default class CurrentlyDownloading extends React.Component{
 
@@ -77,6 +77,7 @@ export default class CurrentlyDownloading extends React.Component{
                         Current DLAPI Tracked Downloads
                     </Card.Header>
                     <ListGroup variant="flush">
+                        {this.state.curDownload.length === 0 && 'There are no items downloading.'}
                         {this.state.curDownload}
                     </ListGroup>
                 </Card>
