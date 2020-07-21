@@ -10,7 +10,7 @@ import { Textfit } from 'react-textfit';
 /**
  * An object representing a movie, currently a button.
  * Responsible for submitting a download and visualizing a movie.
- * @version 1.0.2
+ * @version 1.0.3
  */
 export default class MovieTile extends React.Component{
 
