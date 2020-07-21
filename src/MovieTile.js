@@ -10,7 +10,7 @@ import { Textfit } from 'react-textfit';
 /**
  * An object representing a movie, currently a button.
  * Responsible for submitting a download and visualizing a movie.
- * @version 1.0.2
+ * @version 1.0.3
  */
 export default class MovieTile extends React.Component{
 
@@ -47,7 +47,20 @@ export default class MovieTile extends React.Component{
      * @param {string} seasonNumber The season number / representation.
      */
     downloadWithMeta(showName, seasonNumber){
-        this.download(this.props.path + "tv/" + showName + "/" + seasonNumber + "/")
+
+        // Check if the show name was entered, otherwise show error.
+        if(showName === ''){
+            this.setState({'askForMeta': false, 'errorState': true, 'message': 'TV show name is required to download.'})
+            return;
+        }
+
+        // Check if there is a season number. If empty then we don't need the extra /.
+        if(seasonNumber === ''){
+            this.download(this.props.path + "tv/" + showName + "/")
+        }else{
+            this.download(this.props.path + "tv/" + showName + "/" + seasonNumber + "/")
+        }
+
         this.setState({'askForMeta': false});
     }
 
@@ -116,7 +129,7 @@ export default class MovieTile extends React.Component{
 
         var errorBubble;
         if(this.state.errorState){
-            errorBubble = (<ErrorMessage title="Error Downloading Movie" message={this.state.message} onClosed={this.onErrorClosed}/>)
+            errorBubble = (<ErrorMessage title="Error Starting Download" message={this.state.message} onClosed={this.onErrorClosed}/>)
         }
 
         return (
