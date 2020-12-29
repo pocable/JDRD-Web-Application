@@ -42,13 +42,8 @@ export default class JackettSearch extends React.Component{
         if(this.state.movieCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.movieCategories);}
         if(this.state.tvCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.tvCategories);}
 
-
-        // Format the link that we need to query
-        var api_key = window._env_.REACT_APP_JACKETT_API_KEY;
-        var limit = 300;
-        var link = window._env_.REACT_APP_CORS_PROXY + window._env_.REACT_APP_JACKETT_LINK + `api/v2.0/indexers/ettv/results/torznab?apikey=${api_key}&cat=${chosenCategories.join(',')}&t=search&limit=${limit}&q=${encodeURIComponent(this.state.formSearchQuery)}`;
-        console.log(link);
-        fetch(link, {
+        // Contact DLAPI to search jackett. Removes the API keys from the front of the software.
+        fetch(window._env_.REACT_APP_DLAPI_LINK + "api/v1/jackett/search?query=" + encodeURIComponent(this.state.formSearchQuery) + "&categories=" + chosenCategories.join(','), {
             headers: new Headers({
                 'Authorization': window._env_.REACT_APP_DLAPI_API_KEY,
             })
