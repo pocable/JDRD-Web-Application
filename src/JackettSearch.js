@@ -80,8 +80,8 @@ export default class JackettSearch extends React.Component{
         return (
             <div className="jackettsearch">
                 <Form onSubmit={this.searchJackett} className='BorderBox'>
-                    <Form.Group controlId="basicSearch" className='SearchBorder'>
-                        <Form.Control plaintext autoComplete="off" value={this.state.formSearchQuery} onChange={this.updateText}  placeholder="Enter a movie or tv show name" />
+                    <Form.Group controlId="basicSearch">
+                        <input name="movieQuery" type="text" className="form-control" placeholder="Enter a movie or tv show name" value={this.state.formSearchQuery} onChange={this.updateText} autoComplete="off" />
                     </Form.Group>
                     <fieldset>
                         <Form.Group>

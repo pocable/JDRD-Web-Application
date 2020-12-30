@@ -35,6 +35,11 @@ export default class CurrentlyDownloading extends React.Component{
         this.setState({'errorState': false})
     }
 
+    // Prevent memory leaks
+    componentWillUnmount(){
+        clearInterval(this.interval)
+    }
+
     /**
      * Get a list of items DLAPI is currently processing for download
      */
