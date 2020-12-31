@@ -54,10 +54,12 @@ export default class LoginWindow extends React.Component{
     }
 
 
+    // TODO: FIX THE WINDOW WIDTH, LOOKS BAD ON MOBILE!
+
     render(){
         return (
             <div className="LoginWindow">
-                <Card style={{width: '30rem', height: '14rem', marginLeft: 'auto', marginRight: 'auto'}}>
+                <Card style={{height: '14rem', maxWidth: '30rem', marginLeft: 'auto', marginRight: 'auto'}}>
                     <Card.Body>
                         <Card.Title>Login Required</Card.Title>
                         <Card.Subtitle className="mb-2 text-muted">Enter your DLAPI User Key or API Key</Card.Subtitle>
