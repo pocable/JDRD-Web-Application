@@ -4,7 +4,7 @@ import {Button} from 'react-bootstrap';
 import ErrorMessage from './ErrorMessage';
 import MetadataRequestWindow from './MetadataRequestWindow';
 import ConfirmWindow from './ConfirmWindow';
-import { Textfit } from 'react-textfit';
+import {FaCloudDownloadAlt} from 'react-icons/fa'
 
 
 /**
@@ -25,6 +25,12 @@ export default class MovieTile extends React.Component{
 
         /** The title of the show. */
         title: PropTypes.string,
+
+        /** The number of people currently seeding the torrent. */
+        seeders: PropTypes.number,
+
+        /** The number of people currently leeching the torrent. */
+        leechers: PropTypes.number,
         
         /** If the displayed item is a TV show or not. */
         isTv: PropTypes.bool
@@ -85,10 +91,15 @@ export default class MovieTile extends React.Component{
                 'path': path
             })
         }).then(response => {
-            if(response.status !== 200){
-                this.setState({'errorState': true, 'message': 'Recieved ' + response.status})
+            return response.json()
+        }).then(data => {
+            if(data === JSON.stringify({})){
+                console.error(data);
+                this.setState({'errorState': true, 'message': 'Recieved ' +  + '. Error is in the console.'})
             }
-        });
+        }).catch(exp => {
+            this.setState({'errorState': true, 'message': 'Recieved ' + exp + ' with no data.'})
+        })
     }
 
     downloadButtonPressed(){
@@ -134,15 +145,22 @@ export default class MovieTile extends React.Component{
 
         return (
             <>
-                {errorBubble}
-                {popup}
-                <Button variant="secondary" size="lg" block onClick={this.downloadButtonPressed} title={this.props.title}>
-                    <Textfit>
-                        {this.props.title}
-                    </Textfit>
-
-                    <p>Seeders: {this.props.seeders}</p>
-                </Button>
+                <tr>
+                    {errorBubble}
+                    {popup}
+                    <td className="MovieTitle">
+                        {this.props.title.replaceAll(".", " ")}
+                    </td>
+                    <td>
+                        {this.props.seeders}
+                    </td>
+                    <td>
+                        {this.props.leechers}
+                    </td>
+                    <td>
+                        <Button variant="secondary" block onClick={this.downloadButtonPressed} title={this.props.title}><FaCloudDownloadAlt/></Button>
+                    </td>
+                </tr>
             </>
         );
     }

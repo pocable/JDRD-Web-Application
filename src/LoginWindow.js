@@ -53,9 +53,6 @@ export default class LoginWindow extends React.Component{
         this.setState({'userpass': event.target.value})
     }
 
-
-    // TODO: FIX THE WINDOW WIDTH, LOOKS BAD ON MOBILE!
-
     render(){
         return (
             <div className="LoginWindow">

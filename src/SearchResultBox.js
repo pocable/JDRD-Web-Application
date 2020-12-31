@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types'
-import {ButtonToolbar} from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
 
 /**
  * Box for containing the search results from JackettSearch
@@ -23,9 +23,21 @@ export default class SearchResultBox extends React.Component{
             return ( <></> );
         }
         return (
-            <ButtonToolbar vertical={1} className='BorderBox'>
-                {this.props.tiles}
-            </ButtonToolbar>
+            <div className="BorderBox">
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th>Torrent Name</th>
+                            <th>Seeders</th>
+                            <th>Leechers</th>
+                            <th>Download</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.props.tiles}
+                    </tbody>
+                </Table>
+            </div>
         );
     }
 }

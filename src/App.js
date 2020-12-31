@@ -116,18 +116,16 @@ export default class App extends React.Component{
       );
     }
 
-
-
     return (
       <div className="App">
         {navbar}
         <Container fluid style={{paddingTop: "10px"}}>
           <Row>
-            <Col sm={4} md>
+            <Col md>
               <CurrentlyDownloading />
               <br></br>
             </Col>
-            <Col sm={8} md> 
+            <Col md> 
               <JackettSearch />
             </Col>
           </Row>

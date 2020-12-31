@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import {ListGroup, Button, Modal} from 'react-bootstrap';
+import {Button, Modal} from 'react-bootstrap';
 import ConfirmWindow from './ConfirmWindow';
+import {MdCancel} from 'react-icons/md';
 
 /**
  * An object representing an item currently being downloaded by DLAPI
@@ -86,24 +87,23 @@ export default class CurrentDownloadListItem extends React.Component{
             confirmModel = (<ConfirmWindow message={this.state.confirmMessage} onConfirm={this.onConfirmClicked} onCancel={this.onConfirmClosed}/>)
         }
         return(
-            <div className="ListItem">
-                {confirmModel}
-                <Modal
-                    show={this.state.deleteError}
-                    onHide={this.handleModalClose}
-                >
-                    <Modal.Header closeButton>
-                        <Modal.Title>Error Canceling Download</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        Recieved Status Code: {this.state.statusCode}
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="primary" onClick={this.handleModalClose}>Close</Button>
-                    </Modal.Footer>
-                </Modal>
-                <ListGroup.Item key={this.props.rdid}>{this.props.title} <br></br> {this.props.path} - {this.props.rdid} <br></br><Button variant="danger" onClick={this.onCancelClicked}>Cancel Download</Button></ListGroup.Item>
-            </div>
+                <tr>
+                    {confirmModel}
+                    <Modal show={this.state.deleteError} onHide={this.handleModalClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Error Canceling Download</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            Recieved Status Code: {this.state.statusCode}
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="primary" onClick={this.handleModalClose}>Close</Button>
+                        </Modal.Footer>
+                    </Modal>
+                    <td className="MovieTitle">{this.props.title.replaceAll(".", " ")}</td>
+                    <td>{this.props.path}</td>
+                    <td><Button variant="danger" onClick={this.onCancelClicked}><MdCancel /></Button></td>
+                </tr>
         );
     }
 }

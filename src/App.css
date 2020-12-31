@@ -16,6 +16,7 @@
 .BorderBox {
   border: 2px solid;
   border-radius: 5px;
+  border-color: white;
   padding: 10px;
   background-color: white;
 }
@@ -24,4 +25,16 @@
   border: 2px solid;
   border-radius: 5px;
   padding: 1px;
+}
+
+Table{
+  border-collapse: collapse;
+  background-color: white;
+  white-space:normal;
+  table-layout: fixed;
+}
+
+.MovieTitle{
+  word-wrap: break-word;
+  max-width: 100px;
 }

@@ -56,8 +56,9 @@ export default class JackettSearch extends React.Component{
             for(let item of data.getElementsByTagName('item')){
                 var title = item.getElementsByTagName('title')['0'].innerHTML;
                 var link = item.getElementsByTagName('link')['0'].innerHTML;
-                var seeders = item.querySelector('[name=seeders]').getAttribute('value');
-                searchResults.push(<MovieTile key={title} isTV={this.state.tvCheckbox === 'on'} link={link} title={title} seeders={seeders} path={"/media/"}/>);
+                var seeders = parseInt(item.querySelector('[name=seeders]').getAttribute('value'));
+                var peers = parseInt(item.querySelector('[name=peers]').getAttribute('value'));
+                searchResults.push(<MovieTile key={title} isTV={this.state.tvCheckbox === 'on'} link={link} title={title} seeders={seeders} leechers={peers-seeders} path={"/media/"}/>);
             }
             searchResults = searchResults.sort(function(a, b){ return a.props.seeders - b.props.seeders; }).reverse();
             this.setState({'searchDisabled': false, 'searchResults': searchResults});
