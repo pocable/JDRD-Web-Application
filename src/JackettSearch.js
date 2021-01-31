@@ -31,9 +31,9 @@ export default class JackettSearch extends React.Component{
 
         // If a magnet link is added, do not search and report it.
         if(this.state.formSearchQuery.startsWith("magnet:?")){
-            var links = [<MovieTile key='magnet' isTV={false} link={this.state.formSearchQuery} title='Custom Movie Magnet Link' seeders={'?'} path={"/media/"} />, 
-                <MovieTile key='magnet' isTV={true} link={this.state.formSearchQuery} title='Custom TV Magnet Link' seeders={'?'} path={"/media/"} />]
-            this.setState({'searchDisabled': false, 'searchResults': ((this.state.tvCheckbox === 'on') ? links[1] : links[0])});
+            var links = [<MovieTile key='magnet' isTV={false} link={this.state.formSearchQuery} title={'Movie Magnet: ' + this.state.formSearchQuery.substring(20, 60)}  path={"/media/"} />, 
+                <MovieTile key='magnet' isTV={true} link={this.state.formSearchQuery} title={'TV Magnet: ' + this.state.formSearchQuery.substring(20, 60)}  path={"/media/"} />]
+            this.setState({'searchDisabled': false, 'searchResults': [((this.state.tvCheckbox === 'on') ? links[1] : links[0])]});
             return;
         }
 
