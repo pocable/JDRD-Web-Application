@@ -6,6 +6,7 @@ import JackettSearch from './JackettSearch';
 import {Container, Row, Col, Navbar, Button, Nav} from 'react-bootstrap';
 import {getCookie, setCookie, deleteCookie} from './CookieLib';
 import LoginWindow from './LoginWindow.js';
+import SearchResultBox from './SearchResultBox';
 
 /**
  * Entrypoint for JDRD web. Overall page formatting is declared here.
@@ -13,12 +14,11 @@ import LoginWindow from './LoginWindow.js';
  */
 export default class App extends React.Component{
 
-
   constructor(props){
     super(props);
 
     // Check if cookie exists
-    var intstate = {reqUpdate: false}
+    var intstate = {reqUpdate: false, searchJson: [], promptTV: false}
 
     var api_key = getCookie("DLAPI_KEY");
     if (api_key === ""){
@@ -29,6 +29,8 @@ export default class App extends React.Component{
     this.state = intstate;
     this.loginCallback = this.loginCallback.bind(this);
     this.deleteSession = this.deleteSession.bind(this);
+    this.updateJackettData = this.updateJackettData.bind(this);
+    this.updatePromptTV = this.updatePromptTV.bind(this);
   }
 
   componentDidMount(){
@@ -82,6 +84,14 @@ export default class App extends React.Component{
     })
   }
 
+  updateJackettData(data){
+    this.setState({searchJson: data});
+  }
+
+  updatePromptTV(data){
+    this.setState({promptTV: data});
+  }
+
   render(){
     var logoutButton;
     if(!this.state.reqUpdate){
@@ -126,7 +136,16 @@ export default class App extends React.Component{
               <br></br>
             </Col>
             <Col md> 
-              <JackettSearch />
+              <Row>
+                <Col>
+                  <JackettSearch jsonCallback={this.updateJackettData} tvCallback={this.updatePromptTV}/>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <SearchResultBox jackettJson={this.state.searchJson} promptTV={this.state.promptTV}/>
+                </Col>
+              </Row>
             </Col>
           </Row>
           

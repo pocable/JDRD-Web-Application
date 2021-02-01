@@ -1,7 +1,7 @@
 import React from 'react';
 import {Form, Button} from 'react-bootstrap';
 import MovieTile from './MovieTile'
-import SearchResultBox from './SearchResultBox';
+import PropTypes from 'prop-types'
 
 /**
  * A form which searches jackett and puts the results into a button toolbar
@@ -9,11 +9,20 @@ import SearchResultBox from './SearchResultBox';
  */
 export default class JackettSearch extends React.Component{
 
-    state = {'searchResults': [], 'formSearchQuery': '', 'searchDisabled': false, 'searchJson': '', 'tvCheckbox': 'off', 'movieCheckbox': 'on', 'unrestrictCheckbox': 'off'}
+    static propTypes = {
+        /** 
+         * Callback function for when json has been retrieved from jackett.
+         * @see App
+         */
+        jsonCallback: PropTypes.func,
+        tvCallback: PropTypes.func
+    }
+
+    state = {'formSearchQuery': '', 'searchDisabled': false, 'tvCheckbox': 'off', 'movieCheckbox': 'on', 'unrestrictCheckbox': 'off'}
     
     // These categories are according to jackett and other torrenting websites.
-    tvCategories = [5000,5010,5030,5040,5045,5050,5060,5070,5080,8000,8010];
-    movieCategories = [2000,2010,2020,2030,2040,2045,2050,2060,2070,2080];
+    tvCategories = [5000,8000,8010];
+    movieCategories = [2000];
 
     // This is every single category in jackett.
     unrestrictCategories = [1000, 1010, 1020, 1030, 1040, 1050, 1060, 1070, 1080, 1090, 1110, 1120, 1130, 
@@ -21,8 +30,6 @@ export default class JackettSearch extends React.Component{
         3050, 3060, 4000, 4010, 4020, 4030, 4040, 4050, 4060, 4070, 5000, 5010, 5020, 5030, 5040, 5045, 5050, 
         5060, 5070, 5080, 6000, 6010, 6020, 6030, 6040, 6045, 6050, 6060, 6070, 6080, 6090, 7000, 7010, 7020, 
         7030, 7040, 7050, 7060, 8000, 8010, 8020, 100000]
-
-    maxDisplaySize = 25;
 
     constructor(props){
         super(props);
@@ -53,8 +60,6 @@ export default class JackettSearch extends React.Component{
         if(this.state.unrestrictCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.unrestrictCategories);}
 
         var query_url = window._env_.REACT_APP_DLAPI_LINK + "api/v1/jackett/search?query=" + encodeURIComponent(this.state.formSearchQuery) + "&categories=" + chosenCategories.join(',');
-        console.log(query_url);
-
         // Contact DLAPI to search jackett. Removes the API keys from the front of the software.
         fetch(query_url, {
             headers: new Headers({
@@ -63,29 +68,33 @@ export default class JackettSearch extends React.Component{
         }).then(response => {
             return response.json();
         }).then(data => {
-            var searchResults = []
-            var item;
-            for(var i = 0; i < this.maxDisplaySize; i++){
-                item = data['Results'][i];
-                console.log(item);
-                searchResults.push(<MovieTile key={i} isTV={this.state.tvCheckbox === 'on'} link={item['Link']} title={item['Title']} seeders={item['Seeders']} leechers={item['Peers']} path={"/media/"}/>);
-            }
-            searchResults = searchResults.sort(function(a, b){ return a.props.seeders - b.props.seeders; }).reverse();
-            console.log(searchResults.length)
-            this.setState({'searchDisabled': false, 'searchSavedResults': data['Results'], 'searchResults': searchResults});
+            this.props.jsonCallback(data['Results']);
+            this.setState({'searchDisabled': false});
         });
     }
 
     toggleTvCheckbox(){
         this.setState({'tvCheckbox': 'on', 'movieCheckbox': 'off', 'unrestrictCheckbox' : 'off'});
+
+        // Clear current search results and set to tv.
+        this.props.jsonCallback([]);
+        this.props.tvCallback(true);
     }
 
     toggleMovieCheckbox(){
         this.setState({'movieCheckbox': 'on', 'tvCheckbox': 'off', 'unrestrictCheckbox' : 'off'});
+
+        // Clear current search results and set to non tv.
+        this.props.jsonCallback([]);
+        this.props.tvCallback(false);
     }
 
     toggleUnrestrictCheckbox(){
         this.setState({'movieCheckbox': 'off', 'tvCheckbox': 'off', 'unrestrictCheckbox' : 'on'});
+
+        // Clear current search results and set to non tv.
+        this.props.jsonCallback([]);
+        this.props.tvCallback(false);
     }
 
     updateText(event){
@@ -111,7 +120,6 @@ export default class JackettSearch extends React.Component{
                     </Button>
                 </Form>
                 <br></br>
-                <SearchResultBox tiles={this.state.searchResults}/>
             </div>
         );
     }
