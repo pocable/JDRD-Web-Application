@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, ListGroup} from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
 import CurrentDownloadListItem from './CurrentDownloadListItem';
 import ErrorMessage from './ErrorMessage';
 
@@ -33,6 +33,11 @@ export default class CurrentlyDownloading extends React.Component{
     // On the error window closed
     onErrorClosed(){
         this.setState({'errorState': false})
+    }
+
+    // Prevent memory leaks
+    componentWillUnmount(){
+        clearInterval(this.interval)
     }
 
     /**
@@ -72,15 +77,26 @@ export default class CurrentlyDownloading extends React.Component{
         return (
             <div className='CurrentDownloads'>
                 {errorBubble}
-                <Card>
-                    <Card.Header>
-                        Current DLAPI Tracked Downloads
-                    </Card.Header>
-                    <ListGroup variant="flush">
-                        {this.state.curDownload.length === 0 && 'There are no items downloading.'}
-                        {this.state.curDownload}
-                    </ListGroup>
-                </Card>
+                <div className="BorderBox">
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th colSpan="3">
+                                    Currently Tracked Items
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Torrent Name</th>
+                                <th>Location</th>
+                                <th>Cancel</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.curDownload.length === 0 && <tr><td colSpan="3">There are no items downloading.</td></tr>}
+                            {this.state.curDownload}
+                        </tbody>
+                    </Table>
+                </div>
             </div>
         );
     }
