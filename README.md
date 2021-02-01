@@ -10,6 +10,7 @@ Note: Please only use this for grabbing legal backups. I am not responsible for 
 Create a .env file in the main folder and enter the following information
 ```
 REACT_APP_DLAPI_LINK = INSERT LINK HERE
+REACT_APP_TOKEN_EXPIRY = OPTIONAL, DAYS UNTIL TOKEN EXPIRES. MUST MATCH DLAPI (Default 1)
 ```
 Since these are environment variables set them when deploying. This system only communicates with API's so no paths are needed.
 DLAPI must have the jackett module enabled and the session module enabled in order to use JDRD.
