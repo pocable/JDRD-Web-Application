@@ -9,11 +9,11 @@ import SearchResultBox from './SearchResultBox';
  */
 export default class JackettSearch extends React.Component{
 
-    state = {'searchResults': [], 'formSearchQuery': '', 'searchDisabled': false, 'tvCheckbox': 'off', 'movieCheckbox': 'on', 'unrestrictCheckbox': 'off'}
+    state = {'searchResults': [], 'formSearchQuery': '', 'searchDisabled': false, 'searchJson': '', 'tvCheckbox': 'off', 'movieCheckbox': 'on', 'unrestrictCheckbox': 'off'}
     
     // These categories are according to jackett and other torrenting websites.
     tvCategories = [5000,5010,5030,5040,5045,5050,5060,5070,5080,8000,8010];
-    movieCategories = [2000,2010,2020,2030,2040,2045,2050,2060,2070,2080,8000,8010];
+    movieCategories = [2000,2010,2020,2030,2040,2045,2050,2060,2070,2080];
 
     // This is every single category in jackett.
     unrestrictCategories = [1000, 1010, 1020, 1030, 1040, 1050, 1060, 1070, 1080, 1090, 1110, 1120, 1130, 
@@ -21,6 +21,8 @@ export default class JackettSearch extends React.Component{
         3050, 3060, 4000, 4010, 4020, 4030, 4040, 4050, 4060, 4070, 5000, 5010, 5020, 5030, 5040, 5045, 5050, 
         5060, 5070, 5080, 6000, 6010, 6020, 6030, 6040, 6045, 6050, 6060, 6070, 6080, 6090, 7000, 7010, 7020, 
         7030, 7040, 7050, 7060, 8000, 8010, 8020, 100000]
+
+    maxDisplaySize = 25;
 
     constructor(props){
         super(props);
@@ -59,22 +61,18 @@ export default class JackettSearch extends React.Component{
                 'Authorization': window._env_.REACT_APP_DLAPI_API_KEY,
             })
         }).then(response => {
-            return response.text();
-        }).then(str => {
-            return (new window.DOMParser()).parseFromString(str, "text/xml");
+            return response.json();
         }).then(data => {
             var searchResults = []
-            var count = 0;
-            for(let item of data.getElementsByTagName('item')){
-                var title = item.getElementsByTagName('title')['0'].innerHTML;
-                var link = item.getElementsByTagName('link')['0'].innerHTML;
-                var seeders = parseInt(item.querySelector('[name=seeders]').getAttribute('value'));
-                var peers = parseInt(item.querySelector('[name=peers]').getAttribute('value'));
-                searchResults.push(<MovieTile key={count} isTV={this.state.tvCheckbox === 'on'} link={link} title={title} seeders={seeders} leechers={peers-seeders} path={"/media/"}/>);
-                count += 1;
+            var item;
+            for(var i = 0; i < this.maxDisplaySize; i++){
+                item = data['Results'][i];
+                console.log(item);
+                searchResults.push(<MovieTile key={i} isTV={this.state.tvCheckbox === 'on'} link={item['Link']} title={item['Title']} seeders={item['Seeders']} leechers={item['Peers']} path={"/media/"}/>);
             }
             searchResults = searchResults.sort(function(a, b){ return a.props.seeders - b.props.seeders; }).reverse();
-            this.setState({'searchDisabled': false, 'searchResults': searchResults});
+            console.log(searchResults.length)
+            this.setState({'searchDisabled': false, 'searchSavedResults': data['Results'], 'searchResults': searchResults});
         });
     }
 
