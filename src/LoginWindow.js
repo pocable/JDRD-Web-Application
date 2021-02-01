@@ -35,7 +35,7 @@ export default class LoginWindow extends React.Component{
             }).then(response => {
                 if((!response.ok)){ 
                     if(response.status === 429){
-                        this.setState({incorrectPassText: true, errorMessage: "Too many incorrect guesses. Please try again later."});
+                        this.setState({incorrectPassText: true, errorMessage: "Rate limited. Please try again later."});
                     }else{
                         this.setState({incorrectPassText: true, errorMessage: "Incorrect Login Provided"});
                     }

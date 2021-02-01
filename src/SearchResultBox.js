@@ -76,8 +76,14 @@ export default class SearchResultBox extends React.Component{
 
 
     render(){
-        var visibleTiles = this.state.allTiles.slice(this.maxDisplaySize * this.state.pageIndex, Math.min(this.maxDisplaySize * (this.state.pageIndex + 1), this.props.jackettJson.length));
-        var numberItems = Math.ceil(this.props.jackettJson.length / this.maxDisplaySize)
+        var visibleTiles;
+        var numberItems = 0;
+        if(this.props.jackettJson === undefined){
+            visibleTiles = [];
+        }else{
+            visibleTiles = this.state.allTiles.slice(this.maxDisplaySize * this.state.pageIndex, Math.min(this.maxDisplaySize * (this.state.pageIndex + 1), this.props.jackettJson.length));
+            numberItems = Math.ceil(this.props.jackettJson.length / this.maxDisplaySize);
+        }
 
         // Build pagination items
         // Elipses can be implemented but torrents will be extremely dead at this point
