@@ -67,7 +67,8 @@ export default class SearchResultBox extends React.Component{
     }
 
     onPageinationNext(){
-        if(this.state.pageIndex !== this.maxPaginationSize - 1){
+        var numberItems = Math.ceil(this.props.jackettJson.length / this.maxDisplaySize);
+        if(this.state.pageIndex < Math.min(this.maxPaginationSize, numberItems) - 1){
             this.setState({pageIndex: this.state.pageIndex + 1});
         }
     }
