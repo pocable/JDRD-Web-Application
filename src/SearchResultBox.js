@@ -42,14 +42,24 @@ export default class SearchResultBox extends React.Component{
     buildTiles(){
         var searchResults = []
         if (this.props.jackettJson.length === 0){ return [];}
-
-
+        
         for(var i = 0; i < this.props.jackettJson.length; i++){
             var item = this.props.jackettJson[i];
-            searchResults.push(<MovieTile key={i} isTV={this.props.promptTV} link={item['Link']} title={item['Title']} seeders={item['Seeders']} leechers={item['Peers']} path={"/media/"}/>);
+
+            // Get the item link, if magnet is there DLAPI treats both the same but magnet is more efficient.
+            var link = item['Link']
+            if(item['MagnetUri'] !== null){
+                link = item['MagnetUri']
+            }
+
+            // Add it to results if the link is valid.
+            if(link !== undefined && link !== null){
+                searchResults.push(<MovieTile key={i} isTV={this.props.promptTV} link={link} title={item['Title']} seeders={item['Seeders']} leechers={item['Peers']} path={"/media/"}/>);
+            }
         }
 
         searchResults = searchResults.sort(function(a, b){ return a.props.seeders - b.props.seeders; }).reverse();
+        console.log(searchResults[1]);
         return searchResults;
     }
 
