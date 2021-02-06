@@ -42,7 +42,7 @@ export default class SearchResultBox extends React.Component{
     buildTiles(){
         var searchResults = []
         if (this.props.jackettJson.length === 0){ return [];}
-        
+
         for(var i = 0; i < this.props.jackettJson.length; i++){
             var item = this.props.jackettJson[i];
 
@@ -59,7 +59,6 @@ export default class SearchResultBox extends React.Component{
         }
 
         searchResults = searchResults.sort(function(a, b){ return a.props.seeders - b.props.seeders; }).reverse();
-        console.log(searchResults[1]);
         return searchResults;
     }
 
