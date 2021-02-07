@@ -79,7 +79,7 @@ export default class MovieTile extends React.Component{
      * @param {string} path The path provided to download to. 
      */
     download(path){
-        console.log('Submitting download to path: ' + path);
+        console.log('Title: ' + this.props.title + '\nLink: ' + this.props.link + '\n Submitted to download to path: ' + path);
         fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/content', {
             method: 'post',
             headers: new Headers({
