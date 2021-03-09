@@ -102,6 +102,13 @@ export default class JackettSearch extends React.Component{
     }
 
     render(){
+
+        // Render the no filter checkbox if its configured to show
+        var nofilter;
+        if (window._env_.REACT_APP_ALLOW_NO_FILTER !== undefined && window._env_.REACT_APP_ALLOW_NO_FILTER.toLowerCase() === "true"){
+            nofilter = <Form.Check inline type="radio" name="formHor" onChange={this.toggleUnrestrictCheckbox} label="No Filter" />
+        }
+
         return (
             <div className="jackettsearch">
                 <Form onSubmit={this.searchJackett} className='BorderBox'>
@@ -112,7 +119,7 @@ export default class JackettSearch extends React.Component{
                         <Form.Group>
                             <Form.Check inline type="radio" name="formHor" defaultChecked onChange={this.toggleMovieCheckbox} label="Movie" />
                             <Form.Check inline type="radio" name="formHor" onChange={this.toggleTvCheckbox} label="TV Show" />
-                            <Form.Check inline type="radio" name="formHor" onChange={this.toggleUnrestrictCheckbox} label="No Filter" />
+                            {nofilter}
                         </Form.Group>
                     </fieldset>
                     <Button variant="primary" type="submit" disabled={this.state.searchDisabled}>
