@@ -6,7 +6,7 @@ import {Card} from 'react-bootstrap';
 
 export default class LoginWindow extends React.Component{
 
-    state = {userpass: '', incorrectPassText: false, errorMessage: ""}
+    state = {userpass: '', incorrectPassText: false, errorMessage: "", loginDisabled: false}
 
     static propTypes = {
         /** The callback for when a login is good! Will send back api key and data. */
@@ -23,6 +23,7 @@ export default class LoginWindow extends React.Component{
 
     onSubmit(e){
         e.preventDefault();
+        this.setState({loginDisabled: true});
         // Try to authenticate with the server
         fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/authenticate', {
             method: 'post',
@@ -35,17 +36,20 @@ export default class LoginWindow extends React.Component{
             }).then(response => {
                 if((!response.ok)){ 
                     if(response.status === 429){
-                        this.setState({incorrectPassText: true, errorMessage: "Rate limited. Please try again later."});
+                        this.setState({incorrectPassText: true, errorMessage: "Rate limited. Please try again later.", loginDisabled: false});
                     }else{
-                        this.setState({incorrectPassText: true, errorMessage: "Incorrect Login Provided"});
+                        this.setState({incorrectPassText: true, errorMessage: "Incorrect login provided.", loginDisabled: false});
                     }
+                    this.setState({incorrectPassText: true, errorMessage: "DLAPI returned code " + response.status + ".", loginDisabled: false});
                     throw new Error('Webpage reported error. Authentication may have failed.');
                 }
                 return response.json();
             }).then(data => {
+                this.setState({loginDisabled: false});
                 this.props.loginCallback(data['token']);
             }).catch(exp => {
                 console.error(exp)
+                this.setState({incorrectPassText: true, errorMessage: "Unable to connect to DLAPI.", loginDisabled: false});
             });;
     }
 
@@ -65,7 +69,7 @@ export default class LoginWindow extends React.Component{
                                 <input name="pass" type="password" className="form-control" placeholder="User Key / API Key" value={this.state.apiKey} onChange={this.onAPIKeyChanged} autoComplete="off"/>
                             </Form.Group>
                             {this.state.incorrectPassText && <p style={{color: "red"}}>{this.state.errorMessage}</p>}
-                            <Button variant="success" onClick={this.onSubmit} style={{position: "absolute", bottom: "10px", marginLeft: "auto", marginRight: "auto", left: 0, right: 0, textAlign: "center"}}>Login</Button>
+                            <Button variant="success" onClick={this.onSubmit} disabled={this.state.loginDisabled} style={{position: "absolute", bottom: "10px", marginLeft: "auto", marginRight: "auto", left: 0, right: 0, textAlign: "center"}}>Login</Button>
                         </Form>
                     </Card.Body>
                 </Card>
