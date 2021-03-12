@@ -35,21 +35,24 @@ export default class LoginWindow extends React.Component{
             })
             }).then(response => {
                 if((!response.ok)){ 
-                    if(response.status === 429){
-                        this.setState({incorrectPassText: true, errorMessage: "Rate limited. Please try again later.", loginDisabled: false});
-                    }else{
-                        this.setState({incorrectPassText: true, errorMessage: "Incorrect login provided.", loginDisabled: false});
-                    }
-                    this.setState({incorrectPassText: true, errorMessage: "DLAPI returned code " + response.status + ".", loginDisabled: false});
-                    throw new Error('Webpage reported error. Authentication may have failed.');
+                    throw new Error(response.status);
                 }
                 return response.json();
             }).then(data => {
                 this.setState({loginDisabled: false});
                 this.props.loginCallback(data['token']);
             }).catch(exp => {
+                if(exp.message === "429"){
+                    this.setState({incorrectPassText: true, errorMessage: "Rate limited. Please try again later.", loginDisabled: false});
+                }else if (exp.message === "401"){
+                    this.setState({incorrectPassText: true, errorMessage: "Incorrect login provided.", loginDisabled: false});
+                }else if (exp.message === "400"){
+                    this.setState({incorrectPassText: true, errorMessage: "Invalid input. Check console for details.", loginDisabled: false});
+                }else{
+                    this.setState({incorrectPassText: true, errorMessage: "Failed to connect to DLAPI.", loginDisabled: false});
+                }
                 console.error(exp)
-                this.setState({incorrectPassText: true, errorMessage: "Unable to connect to DLAPI.", loginDisabled: false});
+                this.setState({loginDisabled: false});
             });;
     }
 
