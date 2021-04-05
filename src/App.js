@@ -30,6 +30,7 @@ export default class App extends React.Component{
         this.updateJackettData = this.updateJackettData.bind(this);
         this.updatePromptTV = this.updatePromptTV.bind(this);
         this.closeErrorWindow = this.closeErrorWindow.bind(this);
+        this.errorCallback = this.errorCallback.bind(this);
     }
 
     componentDidMount(){
@@ -58,6 +59,11 @@ export default class App extends React.Component{
     }
 
     componentDidCatch(error, info){
+        console.log("COMPONENT DID CATCH")
+        this.setState({errorState: true, errorTitle: error, errorMessage: info})
+    }
+
+    errorCallback(error, info){
         this.setState({errorState: true, errorTitle: error, errorMessage: info})
     }
 
@@ -141,7 +147,7 @@ export default class App extends React.Component{
 
                         <Row>
                             <Col md>
-                                <CurrentlyDownloading />
+                                <CurrentlyDownloading onError={this.errorCallback} />
                                 <br></br>
                             </Col>
                             <Col md> 
