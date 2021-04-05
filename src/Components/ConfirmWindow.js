@@ -4,7 +4,6 @@ import {Modal, Button} from 'react-bootstrap';
 
 /**
  * Confirm window used to confirm the provided action.
- * @version 1.0.0
  */
 export default class ConfirmWindow extends React.Component{
     

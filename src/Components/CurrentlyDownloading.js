@@ -6,7 +6,6 @@ import CurrentDownloadListItem from './CurrentDownloadListItem';
 /**
  * List display of items currently being downloaded by DLAPI.
  * @see CurrentDownloadListItem
- * @version 1.0.1
  */
 export default class CurrentlyDownloading extends React.Component{
 

@@ -4,7 +4,6 @@ import {Modal, Button} from 'react-bootstrap';
 
 /**
  * Error message Modal used for the application
- * @version 1.0.0
  */
 export default class ErrorMessage extends React.Component{
 

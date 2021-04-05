@@ -4,7 +4,6 @@ import {Modal, Button, Form} from 'react-bootstrap';
 
 /**
   * Window popup form to request TV show metadata.
-  * @version 1.0.1
   */
 export default class MetadataRequestWindow extends React.Component{
 

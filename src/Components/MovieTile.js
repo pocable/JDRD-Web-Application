@@ -9,7 +9,6 @@ import {FaCloudDownloadAlt} from 'react-icons/fa'
 /**
  * An object representing a movie, currently a button.
  * Responsible for submitting a download and visualizing a movie.
- * @version 1.0.3
  */
 export default class MovieTile extends React.Component{
 

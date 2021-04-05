@@ -7,7 +7,6 @@ import MovieTile from './MovieTile'
 /**
  * Box for containing the search results from JackettSearch
  * @see JackettSearch
- * @version 1.0.0
  */
 export default class SearchResultBox extends React.Component{
 

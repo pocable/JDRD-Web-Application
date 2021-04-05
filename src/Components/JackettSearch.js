@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 
 /**
  * A form which searches jackett and puts the results into a button toolbar
- * @version 1.0.1
  */
 export default class JackettSearch extends React.Component{
 

@@ -11,7 +11,6 @@ import ErrorMessage from './Components/ErrorMessage';
 
 /**
  * Entrypoint for JDRD web. Overall page formatting is declared here.
- * @version 1.0.1
  */
 export default class App extends React.Component{
 
@@ -69,7 +68,7 @@ export default class App extends React.Component{
         if(info === "DLAPI could not be reached to update currently downloading list. Please try again later."){
             this.deleteSession()
         }
-        
+
         this.setState({errorState: true, errorTitle: error, errorMessage: info})
     }
 
@@ -127,7 +126,8 @@ export default class App extends React.Component{
                 }
             </Navbar>
         );
-
+        
+        // Error window to display errors if we are in the error state
         var errorWindow;
         if (this.state.errorState){
             errorWindow = (<ErrorMessage title={this.state.errorTitle} message={this.state.errorMessage} onClosed={this.closeErrorWindow}/>)

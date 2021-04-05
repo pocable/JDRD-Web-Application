@@ -7,7 +7,6 @@ import {MdCancel} from 'react-icons/md';
 /**
  * An object representing an item currently being downloaded by DLAPI
  * @see CurrentlyDownloading
- * @version 1.0.0
  */
 export default class CurrentDownloadListItem extends React.Component{
 

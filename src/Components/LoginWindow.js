@@ -3,7 +3,10 @@ import {Button, Form} from 'react-bootstrap';
 import PropTypes from 'prop-types'
 import {Card} from 'react-bootstrap';
 
-
+/**
+ * Login window responsible for getting user password input, fetching dlapi key
+ * and then returning it to the App.js class.
+ */
 export default class LoginWindow extends React.Component{
 
     state = {userpass: '', incorrectPassText: false, errorMessage: "", loginDisabled: false}
