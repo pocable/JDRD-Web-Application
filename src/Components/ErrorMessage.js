@@ -27,6 +27,7 @@ export default class ErrorMessage extends React.Component{
 
         this.handleModalClose = this.handleModalClose.bind(this);
     }
+    
     handleModalClose(){
         this.props.onClosed();
     }
