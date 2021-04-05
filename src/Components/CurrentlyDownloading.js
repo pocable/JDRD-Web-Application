@@ -59,7 +59,8 @@ export default class CurrentlyDownloading extends React.Component{
                 }
                 this.setState({'curDownload': items});
         }).catch(_ => {
-            this.props.onError('Failed to Connect', 'DLAPI could not be reached. Please try again later.')
+            this.props.onError('Failed to Connect', 'DLAPI could not be reached to update currently downloading list. Please try again later.')
+
         });
     }
 

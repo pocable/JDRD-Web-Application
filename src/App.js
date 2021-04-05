@@ -64,6 +64,12 @@ export default class App extends React.Component{
     }
 
     errorCallback(error, info){
+        
+        // There is legit one case where we need to clear the session. Might as well do it here.
+        if(info === "DLAPI could not be reached to update currently downloading list. Please try again later."){
+            this.deleteSession()
+        }
+        
         this.setState({errorState: true, errorTitle: error, errorMessage: info})
     }
 
@@ -158,7 +164,7 @@ export default class App extends React.Component{
                                 </Row>
                                 <Row>
                                     <Col>
-                                    <SearchResultBox jackettJson={this.state.searchJson} promptTV={this.state.promptTV}/>
+                                    <SearchResultBox jackettJson={this.state.searchJson} promptTV={this.state.promptTV} onError={this.errorCallback}/>
                                     </Col>
                                 </Row>
                             </Col>

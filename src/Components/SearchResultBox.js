@@ -17,7 +17,8 @@ export default class SearchResultBox extends React.Component{
          * @see MovieTile
          */
         jackettJson: PropTypes.array,
-        promptTV: PropTypes.bool
+        promptTV: PropTypes.bool,
+        onError: PropTypes.func
     }
 
     state = {pageIndex: 0, lastPropLength: 0, allTiles: []}
@@ -54,7 +55,7 @@ export default class SearchResultBox extends React.Component{
 
             // Add it to results if the link is valid.
             if(link !== undefined && link !== null){
-                searchResults.push(<MovieTile key={i} isTV={this.props.promptTV} link={link} title={item['Title']} seeders={item['Seeders']} leechers={item['Peers']} path={"/media/"}/>);
+                searchResults.push(<MovieTile key={i} isTV={this.props.promptTV} link={link} title={item['Title']} seeders={item['Seeders']} leechers={item['Peers']} path={"/media/"} onError={this.props.onError}/>);
             }
         }
 
