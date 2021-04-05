@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
-import CurrentlyDownloading from './CurrentlyDownloading.js';
+import CurrentlyDownloading from './Components/CurrentlyDownloading';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import JackettSearch from './JackettSearch';
+import JackettSearch from './Components/JackettSearch';
 import {Container, Row, Col, Navbar, Button, Nav} from 'react-bootstrap';
-import {getCookie, setCookie, deleteCookie} from './CookieLib';
-import LoginWindow from './LoginWindow.js';
-import SearchResultBox from './SearchResultBox';
+import {getCookie, setCookie, deleteCookie} from './Utils/CookieLib';
+import LoginWindow from './Components/LoginWindow';
+import SearchResultBox from './Components/SearchResultBox';
 
 /**
  * Entrypoint for JDRD web. Overall page formatting is declared here.
