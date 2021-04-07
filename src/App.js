@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import CurrentlyDownloading from './Components/CurrentlyDownloading';
+import DownloadMonitor from './Components/DownloadMonitor';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import JackettSearch from './Components/JackettSearch';
+import JackettSearchbox from './Components/JackettSearchbox';
 import {Container, Row, Col, Navbar, Button, Nav} from 'react-bootstrap';
 import {getCookie, setCookie, deleteCookie} from './Utils/CookieLib';
 import LoginWindow from './Components/LoginWindow';
@@ -32,36 +32,48 @@ export default class App extends React.Component{
         this.errorCallback = this.errorCallback.bind(this);
     }
 
+    /**
+     * Goal here is to check if the token is still valid. If it isn't, load
+     * the login screen and clear the cookie we have stored.
+     */
     componentDidMount(){
 
         // Check if the token is valid from the constructor.
         fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/authenticate/validtoken', {
-        method: 'post',
-        headers: new Headers({
-            'Content-Type': 'application/json'
-        }),
-        body: JSON.stringify({
-            'token': window._env_.REACT_APP_DLAPI_API_KEY
-        })
+            method: 'post',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify({
+                'token': window._env_.REACT_APP_DLAPI_API_KEY
+            })
         }).then(response => {
             if((!response.ok)){ this.setState({reqUpdate: true}); console.log();}
             return response.json();
         }).then(data => {
             if(!data['is_valid']){
-            deleteCookie("DLAPI_KEY");
-            this.setState({reqUpdate: true})
-            console.log("Authentication failed. Re-enter user password.");
+                deleteCookie("DLAPI_KEY");
+                this.setState({reqUpdate: true})
+                console.log("Authentication failed. Re-enter user password.");
             }else{
-            console.log("Authentication successful.");
+                console.log("Authentication successful.");
             }
         })
     }
 
+    /**
+     * General error catching, just display a window so its easier for the user to report.
+     */
     componentDidCatch(error, info){
-        console.log("COMPONENT DID CATCH")
         this.setState({errorState: true, errorTitle: error, errorMessage: info})
     }
 
+    /**
+     * Function to display an error box. 
+     * If there is the chance of a failure in a child this should be passed through.
+     * @param {The error message, is the window title.} error 
+     * @param {Information about the error, displayed in the body of the modal.} info 
+     */
     errorCallback(error, info){
         
         // There is legit one case where we need to clear the session. Might as well do it here.
@@ -73,6 +85,11 @@ export default class App extends React.Component{
     }
 
 
+    /**
+     * Callback function to handle when a successful login occurs.
+     * This updates the display to show the main application and saves the cookie.
+     * @param {The token recieved from DLAPI} token 
+     */
     loginCallback(token){
         window._env_.REACT_APP_DLAPI_API_KEY = token;
         // Update Cookies
@@ -82,6 +99,9 @@ export default class App extends React.Component{
         this.setState({reqUpdate: false});
     }
 
+    /**
+     * Logout function, deletes the cookie key and tells DLAPI to delete the session key.
+     */
     deleteSession(){
         deleteCookie("DLAPI_KEY");
         this.setState({reqUpdate: true});
@@ -98,21 +118,32 @@ export default class App extends React.Component{
         })
     }
 
+    /**
+     * Sets the state given the recieved data.
+     * @param {The search data recieved from JackettSearchbox} data 
+     */
     updateJackettData(data){
         this.setState({searchJson: data});
     }
 
+    /**
+     * Sets if we need to prompt for a TV download (ask for more metadata)
+     * @param {True or false boolean} data 
+     */
     updatePromptTV(data){
         this.setState({promptTV: data});
     }
 
+    /**
+     * Close the error window.
+     */
     closeErrorWindow(){
         this.setState({errorState: false})
     }
 
     render(){
 
-        // Only put it out here to make it clearer.
+        // Only put the navbar out here to make it clearer to notice.
         var navbar = (
             <Navbar bg="dark" variant="dark">
                 <Navbar.Brand>JDRD Web Downloader</Navbar.Brand>
@@ -153,13 +184,13 @@ export default class App extends React.Component{
 
                         <Row>
                             <Col md>
-                                <CurrentlyDownloading onError={this.errorCallback} />
+                                <DownloadMonitor onError={this.errorCallback} />
                                 <br></br>
                             </Col>
                             <Col md> 
                                 <Row>
                                     <Col>
-                                    <JackettSearch jsonCallback={this.updateJackettData} tvCallback={this.updatePromptTV}/>
+                                    <JackettSearchbox jsonCallback={this.updateJackettData} tvCallback={this.updatePromptTV}/>
                                     </Col>
                                 </Row>
                                 <Row>

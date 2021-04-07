@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import {Button} from 'react-bootstrap';
 import MetadataRequestWindow from './MetadataRequestWindow';
-import ConfirmWindow from './ConfirmWindow';
+import ConfirmMessage from './ConfirmMessage';
 import {FaCloudDownloadAlt} from 'react-icons/fa'
 
 
@@ -70,6 +70,9 @@ export default class MovieTile extends React.Component{
         this.setState({'askForMeta': false});
     }
 
+    /**
+     * Close the ask for metadata modal.
+     */
     cancelModal(){
         this.setState({'askForMeta': false});
     }
@@ -103,6 +106,10 @@ export default class MovieTile extends React.Component{
         })
     }
 
+    /**
+     * Called when the download button is pressed, depending on if its tv
+     * or movie will display a confirmation window or a MetadataRequestWindow.
+     */
     downloadButtonPressed(){
         if(this.props.isTV){
             this.setState({'askForMeta': true, 'confirmState': false});
@@ -112,13 +119,17 @@ export default class MovieTile extends React.Component{
     }
 
 
-    // Called on the confirm dialogue for movies.
+    /**
+     * Called on the confirm button for movies.
+     */
     onConfirmClicked(){
         this.download(this.props.path + 'movies/')
         this.setState({'confirmState': false});
     }
 
-    // Called on closed dialogue for movies.
+    /**
+     * Called on the closed button for movies.
+     */
     onConfirmClosed(){
         this.setState({'confirmState': false});
     }
@@ -132,8 +143,9 @@ export default class MovieTile extends React.Component{
             popup = (<MetadataRequestWindow downloadWithMeta={this.downloadWithMeta} cancelModal={this.cancelModal}/>);
         }
 
+        // If its not TV and we need to display the confirm window, set popup up for display.
         if(!this.props.isTV && this.state.confirmState){
-            popup = (<ConfirmWindow message={this.state.confirmMessage} onConfirm={this.onConfirmClicked} onCancel={this.onConfirmClosed}/>)
+            popup = (<ConfirmMessage message={this.state.confirmMessage} onConfirm={this.onConfirmClicked} onCancel={this.onConfirmClosed}/>)
         }
 
         return (

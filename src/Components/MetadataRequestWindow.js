@@ -53,6 +53,11 @@ export default class MetadataRequestWindow extends React.Component{
     updateShowName(event){
         this.setState({'showName': event.target.value})
     }
+
+    /**
+     * Called when the cancel button is called, will tell parent to not render
+     * this anymore.
+     */
     cancelModal(){
         this.props.cancelModal()
     }
@@ -60,38 +65,38 @@ export default class MetadataRequestWindow extends React.Component{
 
     render(){
         return (
-        <>
-            <Modal show={true} onHide={this.cancelModal}>
-                <Modal.Header>
-                    <Modal.Title>Metadata Required</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form onSubmit={this.submit}>
-                        <Form.Label>Additional metadata is required for TV shows.</Form.Label>
-                        <Form.Group controlId="basicSearch">
-                            <Form.Label>Enter Show Name: </Form.Label>
-                            <input plaintext name="showName" type="text" className="form-control" placeholder="Stargate SG1, Stargate Atlantis, ..." autoComplete="off" value={this.state.showName} onChange={this.updateShowName}/>
-                        </Form.Group>
-                        <fieldset>
-                            <Form.Group>
-                                <Form.Check inline type="radio" name="formHor" onChange={this.toggleSeriesCheckbox} defaultChecked label="Multiple Seasons" />
-                                <Form.Check inline type="radio" name="formHor" onChange={this.toggleSeasonCheckbox} label="Specific Season" />
-                            </Form.Group>
-                        </fieldset>
-                        {this.state.seasonCheckbox === 'on' &&
+            <>
+                <Modal show={true} onHide={this.cancelModal}>
+                    <Modal.Header>
+                        <Modal.Title>Metadata Required</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form onSubmit={this.submit}>
+                            <Form.Label>Additional metadata is required for TV shows.</Form.Label>
                             <Form.Group controlId="basicSearch">
-                                <Form.Label>Enter Season Number/Name: </Form.Label>
-                                <input name="seasonNumber" type="text" className="form-control" plaintext autoComplete="off" value={this.state.seasonNumber} onChange={this.updateSeasonText} placeholder="S01, S02, ..."/>
+                                <Form.Label>Enter Show Name: </Form.Label>
+                                <input plaintext name="showName" type="text" className="form-control" placeholder="Stargate SG1, Stargate Atlantis, ..." autoComplete="off" value={this.state.showName} onChange={this.updateShowName}/>
                             </Form.Group>
-                        }
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="success" onClick={this.submit}>Download</Button>
-                    <Button variant="danger" onClick={this.cancelModal}>Cancel</Button>
-                </Modal.Footer>
-            </Modal>
-        </>
+                            <fieldset>
+                                <Form.Group>
+                                    <Form.Check inline type="radio" name="formHor" onChange={this.toggleSeriesCheckbox} defaultChecked label="Multiple Seasons" />
+                                    <Form.Check inline type="radio" name="formHor" onChange={this.toggleSeasonCheckbox} label="Specific Season" />
+                                </Form.Group>
+                            </fieldset>
+                            {this.state.seasonCheckbox === 'on' &&
+                                <Form.Group controlId="basicSearch">
+                                    <Form.Label>Enter Season Number/Name: </Form.Label>
+                                    <input name="seasonNumber" type="text" className="form-control" plaintext autoComplete="off" value={this.state.seasonNumber} onChange={this.updateSeasonText} placeholder="S01, S02, ..."/>
+                                </Form.Group>
+                            }
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="success" onClick={this.submit}>Download</Button>
+                        <Button variant="danger" onClick={this.cancelModal}>Cancel</Button>
+                    </Modal.Footer>
+                </Modal>
+            </>
         );
     }
 }

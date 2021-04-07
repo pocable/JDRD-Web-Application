@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 /**
  * A form which searches jackett and puts the results into a button toolbar
  */
-export default class JackettSearch extends React.Component{
+export default class JackettSearchbox extends React.Component{
 
     static propTypes = {
         /** 
@@ -39,6 +39,11 @@ export default class JackettSearch extends React.Component{
         this.toggleUnrestrictCheckbox = this.toggleUnrestrictCheckbox.bind(this);
     }
 
+    /**
+     * Given the input will search jackett and callback with the json to the App.
+     * If the input is a magnet link, it will just generate a MovieTile for quick adding.
+     * @param {Button event} event 
+     */
     searchJackett(event){
         // Change to template string
         event.preventDefault();
@@ -109,7 +114,7 @@ export default class JackettSearch extends React.Component{
         }
 
         return (
-            <div className="jackettsearch">
+            <div className="jackettsearchbox">
                 <Form onSubmit={this.searchJackett} className='BorderBox'>
                     <Form.Group controlId="basicSearch">
                         <input name="movieQuery" type="text" className="form-control" placeholder="Enter a movie or tv show name" value={this.state.formSearchQuery} onChange={this.updateText} autoComplete="off" />

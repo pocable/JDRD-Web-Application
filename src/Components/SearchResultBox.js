@@ -5,8 +5,8 @@ import {Table, Pagination} from 'react-bootstrap';
 import MovieTile from './MovieTile'
 
 /**
- * Box for containing the search results from JackettSearch
- * @see JackettSearch
+ * Box for containing the search results from JackettSearchbox
+ * @see JackettSearchbox
  */
 export default class SearchResultBox extends React.Component{
 
@@ -39,6 +39,10 @@ export default class SearchResultBox extends React.Component{
         }
     }
 
+    /**
+     * Generates a list of movie tiles given the jackettJson provided in the prompt.
+     * @returns A list of movie tiles used for rendering.
+     */
     buildTiles(){
         var searchResults = []
         if (this.props.jackettJson.length === 0){ return [];}
@@ -82,9 +86,6 @@ export default class SearchResultBox extends React.Component{
         }
     }
 
-
-
-
     render(){
         var visibleTiles;
         var numberItems = 0;
@@ -106,9 +107,11 @@ export default class SearchResultBox extends React.Component{
             }
         }
 
+        // If there are no tiles, just return empty.
         if(this.state.allTiles.length === 0){
             return ( <></> );
         }
+
         return (
             <div className="BorderBox">
                 <Pagination size='sm'>

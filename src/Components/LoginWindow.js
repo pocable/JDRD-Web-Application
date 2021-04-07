@@ -24,6 +24,12 @@ export default class LoginWindow extends React.Component{
         this.onAPIKeyChanged = this.onAPIKeyChanged.bind(this);
     }
 
+    /**
+     * Called when submit is hit, this function contacts DLAPI to check for a valid
+     * password/api key and will send back a token if good.
+     * If it is not good, error text is displayed below the login box.
+     * @param {Event returned from the button.} e 
+     */
     onSubmit(e){
         e.preventDefault();
         this.setState({loginDisabled: true});
@@ -58,7 +64,7 @@ export default class LoginWindow extends React.Component{
                 this.setState({loginDisabled: false});
             });;
     }
-
+    
     onAPIKeyChanged(event){
         this.setState({'userpass': event.target.value})
     }

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import {Table} from 'react-bootstrap';
-import CurrentDownloadListItem from './CurrentDownloadListItem';
+import DownloadMonitorItem from './DownloadMonitorItem';
 
 /**
  * List display of items currently being downloaded by DLAPI.
- * @see CurrentDownloadListItem
+ * @see DownloadMonitorItem
  */
-export default class CurrentlyDownloading extends React.Component{
+export default class DownloadMonitor extends React.Component{
 
       
     state = {'curDownload': []}
@@ -25,7 +25,10 @@ export default class CurrentlyDownloading extends React.Component{
         this.getCurrentDownloads = this.getCurrentDownloads.bind(this);
     }
 
-    // When mounted, constantly update the current downloads every 5000 seconds.
+    /**
+     * Want to update the download monitor every 5 seconds. This value
+     * can be modified to be quicker but I thought it was a good balance.
+     */
     componentDidMount(){
         this.getCurrentDownloads();
         this.interval = setInterval(async () => {
@@ -33,13 +36,12 @@ export default class CurrentlyDownloading extends React.Component{
         }, 5000);
     }
 
-    // Prevent memory leaks
     componentWillUnmount(){
         clearInterval(this.interval)
     }
 
     /**
-     * Get a list of items DLAPI is currently processing for download
+     * Get a list of items DLAPI is currently processing for download.
      */
     getCurrentDownloads(){
         fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/content/all', {
@@ -54,7 +56,7 @@ export default class CurrentlyDownloading extends React.Component{
             }).then(data => {
                 var items = []
                 for(var x in data){
-                    items.push((<CurrentDownloadListItem key={x} rdid={x} title={data[x]['title']} path={data[x]['path']}/>))
+                    items.push((<DownloadMonitorItem key={x} rdid={x} title={data[x]['title']} path={data[x]['path']}/>))
                 }
                 this.setState({'curDownload': items});
         }).catch(_ => {
@@ -64,7 +66,6 @@ export default class CurrentlyDownloading extends React.Component{
     }
 
     render(){
-
         return (
             <div className='CurrentDownloads'>
                 <div className="BorderBox">
