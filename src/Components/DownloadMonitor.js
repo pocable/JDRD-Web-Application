@@ -1,27 +1,34 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {Table} from 'react-bootstrap';
-import CurrentDownloadListItem from './CurrentDownloadListItem';
-import ErrorMessage from './ErrorMessage';
+import DownloadMonitorItem from './DownloadMonitorItem';
 
 /**
  * List display of items currently being downloaded by DLAPI.
- * @see CurrentDownloadListItem
- * @version 1.0.1
+ * @see DownloadMonitorItem
  */
-export default class CurrentlyDownloading extends React.Component{
+export default class DownloadMonitor extends React.Component{
 
       
-    state = {'curDownload': [], 'errorState': false, 'errorMessage': ''}
+    state = {'curDownload': []}
+
+    static propTypes = {
+
+        /** Function called when there is an error loading. */
+        onError: PropTypes.func
+    }
 
     constructor(props){
         super(props);
 
         this.interval = 0
         this.getCurrentDownloads = this.getCurrentDownloads.bind(this);
-        this.onErrorClosed = this.onErrorClosed.bind(this);
     }
 
-    // When mounted, constantly update the current downloads every 5000 seconds.
+    /**
+     * Want to update the download monitor every 5 seconds. This value
+     * can be modified to be quicker but I thought it was a good balance.
+     */
     componentDidMount(){
         this.getCurrentDownloads();
         this.interval = setInterval(async () => {
@@ -29,19 +36,12 @@ export default class CurrentlyDownloading extends React.Component{
         }, 5000);
     }
 
-
-    // On the error window closed
-    onErrorClosed(){
-        this.setState({'errorState': false})
-    }
-
-    // Prevent memory leaks
     componentWillUnmount(){
         clearInterval(this.interval)
     }
 
     /**
-     * Get a list of items DLAPI is currently processing for download
+     * Get a list of items DLAPI is currently processing for download.
      */
     getCurrentDownloads(){
         fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/content/all', {
@@ -56,27 +56,18 @@ export default class CurrentlyDownloading extends React.Component{
             }).then(data => {
                 var items = []
                 for(var x in data){
-                    items.push((<CurrentDownloadListItem key={x} rdid={x} title={data[x]['title']} path={data[x]['path']}/>))
+                    items.push((<DownloadMonitorItem key={x} rdid={x} title={data[x]['title']} path={data[x]['path']}/>))
                 }
                 this.setState({'curDownload': items});
-            }).catch(exp => {
+        }).catch(_ => {
+            this.props.onError('Failed to Connect', 'DLAPI could not be reached to update currently downloading list. Please try again later.')
 
-                // Issue polling server, clear interval and report error.
-                console.error(exp)
-                this.setState({'errorState': true, 'errorMessage': 'DLAPI may be offline or inaccessible. Double check that "' + window._env_.REACT_APP_DLAPI_LINK + 'api/v1/content/all" is a valid URL to DLAPI.'})
-                clearInterval(this.interval)
-            });
+        });
     }
 
     render(){
-        var errorBubble;
-        if(this.state.errorState){
-            errorBubble = (<ErrorMessage title="Error Polling DLAPI for Downloads" message={this.state.errorMessage} onClosed={this.onErrorClosed}/>)
-        }
-
         return (
             <div className='CurrentDownloads'>
-                {errorBubble}
                 <div className="BorderBox">
                     <Table striped bordered hover>
                         <thead>

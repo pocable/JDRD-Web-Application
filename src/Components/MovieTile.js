@@ -1,20 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import {Button} from 'react-bootstrap';
-import ErrorMessage from './ErrorMessage';
 import MetadataRequestWindow from './MetadataRequestWindow';
-import ConfirmWindow from './ConfirmWindow';
+import ConfirmMessage from './ConfirmMessage';
 import {FaCloudDownloadAlt} from 'react-icons/fa'
 
 
 /**
  * An object representing a movie, currently a button.
  * Responsible for submitting a download and visualizing a movie.
- * @version 1.0.3
  */
 export default class MovieTile extends React.Component{
 
-    state = {'errorState': false, 'message': '', 'askForMeta': false, 'confirmState': false, 'confirmMessage': ''}
+    state = {'askForMeta': false, 'confirmState': false, 'confirmMessage': ''}
 
     static propTypes = {
         /** The main download location path (contains subfolders tv and movies). */
@@ -33,12 +31,14 @@ export default class MovieTile extends React.Component{
         leechers: PropTypes.number,
         
         /** If the displayed item is a TV show or not. */
-        isTv: PropTypes.bool
+        isTv: PropTypes.bool,
+
+        /** On Error call for if there is an issue. */
+        onError: PropTypes.func
     }
 
     constructor(props){
         super(props);
-        this.onErrorClosed = this.onErrorClosed.bind(this);
         this.downloadWithMeta = this.downloadWithMeta.bind(this);
         this.cancelModal = this.cancelModal.bind(this);
         this.download = this.download.bind(this);
@@ -70,6 +70,9 @@ export default class MovieTile extends React.Component{
         this.setState({'askForMeta': false});
     }
 
+    /**
+     * Close the ask for metadata modal.
+     */
     cancelModal(){
         this.setState({'askForMeta': false});
     }
@@ -95,13 +98,18 @@ export default class MovieTile extends React.Component{
         }).then(data => {
             if(data === JSON.stringify({})){
                 console.error(data);
-                this.setState({'errorState': true, 'message': 'Recieved ' +  + '. Error is in the console.'})
+                this.props.onError('Error with Item', 'Failed to convert the movie to JSON. This could be the sign of an incorrect jackett setup. Try another torrent or check your torrents.')
             }
         }).catch(exp => {
-            this.setState({'errorState': true, 'message': 'Recieved ' + exp + ' with no data.'})
+            console.error(exp);
+            this.props.onError('Error with Item', 'Failed to fetch from DLAPI. DLAPI could be down or the Jackett endpoint does not work. Check console for detailed information.')
         })
     }
 
+    /**
+     * Called when the download button is pressed, depending on if its tv
+     * or movie will display a confirmation window or a MetadataRequestWindow.
+     */
     downloadButtonPressed(){
         if(this.props.isTV){
             this.setState({'askForMeta': true, 'confirmState': false});
@@ -110,17 +118,18 @@ export default class MovieTile extends React.Component{
         this.setState({'confirmState': true, 'confirmMessage': 'Download ' + this.props.title + '?'});
     }
 
-    onErrorClosed(){
-        this.setState({'errorState': false});
-    }
 
-
-    // Called on the confirm dialogue.
+    /**
+     * Called on the confirm button for movies.
+     */
     onConfirmClicked(){
         this.download(this.props.path + 'movies/')
         this.setState({'confirmState': false});
     }
 
+    /**
+     * Called on the closed button for movies.
+     */
     onConfirmClosed(){
         this.setState({'confirmState': false});
     }
@@ -134,19 +143,14 @@ export default class MovieTile extends React.Component{
             popup = (<MetadataRequestWindow downloadWithMeta={this.downloadWithMeta} cancelModal={this.cancelModal}/>);
         }
 
+        // If its not TV and we need to display the confirm window, set popup up for display.
         if(!this.props.isTV && this.state.confirmState){
-            popup = (<ConfirmWindow message={this.state.confirmMessage} onConfirm={this.onConfirmClicked} onCancel={this.onConfirmClosed}/>)
-        }
-
-        var errorBubble;
-        if(this.state.errorState){
-            errorBubble = (<ErrorMessage title="Error Starting Download" message={this.state.message} onClosed={this.onErrorClosed}/>)
+            popup = (<ConfirmMessage message={this.state.confirmMessage} onConfirm={this.onConfirmClicked} onCancel={this.onConfirmClosed}/>)
         }
 
         return (
             <>
                 <tr>
-                    {errorBubble}
                     {popup}
                     <td className="MovieTitle">
                         {this.props.title.replaceAll(".", " ")}

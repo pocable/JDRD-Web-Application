@@ -4,7 +4,6 @@ import {Modal, Button} from 'react-bootstrap';
 
 /**
  * Error message Modal used for the application
- * @version 1.0.0
  */
 export default class ErrorMessage extends React.Component{
 
@@ -27,6 +26,7 @@ export default class ErrorMessage extends React.Component{
 
         this.handleModalClose = this.handleModalClose.bind(this);
     }
+    
     handleModalClose(){
         this.props.onClosed();
     }

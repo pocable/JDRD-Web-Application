@@ -3,10 +3,13 @@ import {Button, Form} from 'react-bootstrap';
 import PropTypes from 'prop-types'
 import {Card} from 'react-bootstrap';
 
-
+/**
+ * Login window responsible for getting user password input, fetching dlapi key
+ * and then returning it to the App.js class.
+ */
 export default class LoginWindow extends React.Component{
 
-    state = {userpass: '', incorrectPassText: false, errorMessage: ""}
+    state = {userpass: '', incorrectPassText: false, errorMessage: "", loginDisabled: false}
 
     static propTypes = {
         /** The callback for when a login is good! Will send back api key and data. */
@@ -21,8 +24,15 @@ export default class LoginWindow extends React.Component{
         this.onAPIKeyChanged = this.onAPIKeyChanged.bind(this);
     }
 
+    /**
+     * Called when submit is hit, this function contacts DLAPI to check for a valid
+     * password/api key and will send back a token if good.
+     * If it is not good, error text is displayed below the login box.
+     * @param {Event returned from the button.} e 
+     */
     onSubmit(e){
         e.preventDefault();
+        this.setState({loginDisabled: true});
         // Try to authenticate with the server
         fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/authenticate', {
             method: 'post',
@@ -34,21 +44,27 @@ export default class LoginWindow extends React.Component{
             })
             }).then(response => {
                 if((!response.ok)){ 
-                    if(response.status === 429){
-                        this.setState({incorrectPassText: true, errorMessage: "Rate limited. Please try again later."});
-                    }else{
-                        this.setState({incorrectPassText: true, errorMessage: "Incorrect Login Provided"});
-                    }
-                    throw new Error('Webpage reported error. Authentication may have failed.');
+                    throw new Error(response.status);
                 }
                 return response.json();
             }).then(data => {
+                this.setState({loginDisabled: false});
                 this.props.loginCallback(data['token']);
             }).catch(exp => {
+                if(exp.message === "429"){
+                    this.setState({incorrectPassText: true, errorMessage: "Rate limited. Please try again later.", loginDisabled: false});
+                }else if (exp.message === "401"){
+                    this.setState({incorrectPassText: true, errorMessage: "Incorrect login provided.", loginDisabled: false});
+                }else if (exp.message === "400"){
+                    this.setState({incorrectPassText: true, errorMessage: "Invalid input. Check console for details.", loginDisabled: false});
+                }else{
+                    this.setState({incorrectPassText: true, errorMessage: "Failed to connect to DLAPI.", loginDisabled: false});
+                }
                 console.error(exp)
+                this.setState({loginDisabled: false});
             });;
     }
-
+    
     onAPIKeyChanged(event){
         this.setState({'userpass': event.target.value})
     }
@@ -65,7 +81,7 @@ export default class LoginWindow extends React.Component{
                                 <input name="pass" type="password" className="form-control" placeholder="User Key / API Key" value={this.state.apiKey} onChange={this.onAPIKeyChanged} autoComplete="off"/>
                             </Form.Group>
                             {this.state.incorrectPassText && <p style={{color: "red"}}>{this.state.errorMessage}</p>}
-                            <Button variant="success" onClick={this.onSubmit} style={{position: "absolute", bottom: "10px", marginLeft: "auto", marginRight: "auto", left: 0, right: 0, textAlign: "center"}}>Login</Button>
+                            <Button variant="success" onClick={this.onSubmit} disabled={this.state.loginDisabled} style={{position: "absolute", bottom: "10px", marginLeft: "auto", marginRight: "auto", left: 0, right: 0, textAlign: "center"}}>Login</Button>
                         </Form>
                     </Card.Body>
                 </Card>

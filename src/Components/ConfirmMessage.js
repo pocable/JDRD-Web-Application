@@ -4,9 +4,8 @@ import {Modal, Button} from 'react-bootstrap';
 
 /**
  * Confirm window used to confirm the provided action.
- * @version 1.0.0
  */
-export default class ConfirmWindow extends React.Component{
+export default class ConfirmMessage extends React.Component{
     
     static propTypes = {
         /** The message to show on the main box. */
@@ -35,21 +34,18 @@ export default class ConfirmWindow extends React.Component{
 
     render(){
         return (
-            <Modal
-            show={true}
-            onHide={this.onClosePressed}
-        >
-            <Modal.Header>
-                <Modal.Title>Confirmation</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                {this.props.message}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="success" onClick={this.onConfirmPressed}>Confirm</Button>
-                <Button variant="danger" onClick={this.onClosePressed}>Close</Button>
-            </Modal.Footer>
-        </Modal>
+            <Modal show={true} onHide={this.onClosePressed}>
+                <Modal.Header>
+                    <Modal.Title>Confirmation</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {this.props.message}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="success" onClick={this.onConfirmPressed}>Confirm</Button>
+                    <Button variant="danger" onClick={this.onClosePressed}>Close</Button>
+                </Modal.Footer>
+            </Modal>
         )
     }
 }

@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import {Button, Modal} from 'react-bootstrap';
-import ConfirmWindow from './ConfirmWindow';
+import ConfirmMessage from './ConfirmMessage';
 import {MdCancel} from 'react-icons/md';
 
 /**
  * An object representing an item currently being downloaded by DLAPI
- * @see CurrentlyDownloading
- * @version 1.0.0
+ * @see DownloadMonitor
  */
-export default class CurrentDownloadListItem extends React.Component{
+export default class DownloadMonitorItem extends React.Component{
 
     state = {'title': '', 'path': '', 'rd_code': '', 'deleted': false, 'deleteError': false, 'statusCode': '',
         'confirmState': false, 'confirmMessage': ''}
@@ -24,7 +23,6 @@ export default class CurrentDownloadListItem extends React.Component{
         /** The storage path of where the item will be downloaded into on JDownloader. */
         path: PropTypes.string
     }
-
     
     constructor(props){
         super(props);
@@ -39,8 +37,6 @@ export default class CurrentDownloadListItem extends React.Component{
         this.setState({'deleteError': false});
     }
 
-
-    // Called on the confirm dialogue.
     onConfirmClicked(){
         this.cancelDownload();
         this.setState({'confirmState': false});
@@ -49,7 +45,6 @@ export default class CurrentDownloadListItem extends React.Component{
     onConfirmClosed(){
         this.setState({'confirmState': false});
     }
-
 
     onCancelClicked(){
         this.setState({'confirmState': true, 'confirmMessage': 'Cancel ' + this.props.title + '?'})
@@ -84,7 +79,7 @@ export default class CurrentDownloadListItem extends React.Component{
 
         var confirmModel;
         if(this.state.confirmState){
-            confirmModel = (<ConfirmWindow message={this.state.confirmMessage} onConfirm={this.onConfirmClicked} onCancel={this.onConfirmClosed}/>)
+            confirmModel = (<ConfirmMessage message={this.state.confirmMessage} onConfirm={this.onConfirmClicked} onCancel={this.onConfirmClosed}/>)
         }
         return(
                 <tr>
@@ -101,7 +96,7 @@ export default class CurrentDownloadListItem extends React.Component{
                         </Modal.Footer>
                     </Modal>
                     <td className="MovieTitle">{this.props.title.replaceAll(".", " ")}</td>
-                    <td>{this.props.path}</td>
+                    <td className="textCollapse">{this.props.path}</td>
                     <td><Button variant="danger" onClick={this.onCancelClicked}><MdCancel /></Button></td>
                 </tr>
         );

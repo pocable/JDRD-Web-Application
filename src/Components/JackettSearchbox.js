@@ -5,9 +5,8 @@ import PropTypes from 'prop-types'
 
 /**
  * A form which searches jackett and puts the results into a button toolbar
- * @version 1.0.1
  */
-export default class JackettSearch extends React.Component{
+export default class JackettSearchbox extends React.Component{
 
     static propTypes = {
         /** 
@@ -40,6 +39,11 @@ export default class JackettSearch extends React.Component{
         this.toggleUnrestrictCheckbox = this.toggleUnrestrictCheckbox.bind(this);
     }
 
+    /**
+     * Given the input will search jackett and callback with the json to the App.
+     * If the input is a magnet link, it will just generate a MovieTile for quick adding.
+     * @param {Button event} event 
+     */
     searchJackett(event){
         // Change to template string
         event.preventDefault();
@@ -102,8 +106,15 @@ export default class JackettSearch extends React.Component{
     }
 
     render(){
+
+        // Render the no filter checkbox if its configured to show
+        var nofilter;
+        if (window._env_.REACT_APP_ALLOW_NO_FILTER !== undefined && window._env_.REACT_APP_ALLOW_NO_FILTER.toLowerCase() === "true"){
+            nofilter = <Form.Check inline type="radio" name="formHor" onChange={this.toggleUnrestrictCheckbox} label="No Filter" />
+        }
+
         return (
-            <div className="jackettsearch">
+            <div className="jackettsearchbox">
                 <Form onSubmit={this.searchJackett} className='BorderBox'>
                     <Form.Group controlId="basicSearch">
                         <input name="movieQuery" type="text" className="form-control" placeholder="Enter a movie or tv show name" value={this.state.formSearchQuery} onChange={this.updateText} autoComplete="off" />
@@ -112,7 +123,7 @@ export default class JackettSearch extends React.Component{
                         <Form.Group>
                             <Form.Check inline type="radio" name="formHor" defaultChecked onChange={this.toggleMovieCheckbox} label="Movie" />
                             <Form.Check inline type="radio" name="formHor" onChange={this.toggleTvCheckbox} label="TV Show" />
-                            <Form.Check inline type="radio" name="formHor" onChange={this.toggleUnrestrictCheckbox} label="No Filter" />
+                            {nofilter}
                         </Form.Group>
                     </fieldset>
                     <Button variant="primary" type="submit" disabled={this.state.searchDisabled}>

@@ -5,9 +5,8 @@ import {Table, Pagination} from 'react-bootstrap';
 import MovieTile from './MovieTile'
 
 /**
- * Box for containing the search results from JackettSearch
- * @see JackettSearch
- * @version 1.0.0
+ * Box for containing the search results from JackettSearchbox
+ * @see JackettSearchbox
  */
 export default class SearchResultBox extends React.Component{
 
@@ -17,7 +16,8 @@ export default class SearchResultBox extends React.Component{
          * @see MovieTile
          */
         jackettJson: PropTypes.array,
-        promptTV: PropTypes.bool
+        promptTV: PropTypes.bool,
+        onError: PropTypes.func
     }
 
     state = {pageIndex: 0, lastPropLength: 0, allTiles: []}
@@ -39,6 +39,10 @@ export default class SearchResultBox extends React.Component{
         }
     }
 
+    /**
+     * Generates a list of movie tiles given the jackettJson provided in the prompt.
+     * @returns A list of movie tiles used for rendering.
+     */
     buildTiles(){
         var searchResults = []
         if (this.props.jackettJson.length === 0){ return [];}
@@ -54,7 +58,7 @@ export default class SearchResultBox extends React.Component{
 
             // Add it to results if the link is valid.
             if(link !== undefined && link !== null){
-                searchResults.push(<MovieTile key={i} isTV={this.props.promptTV} link={link} title={item['Title']} seeders={item['Seeders']} leechers={item['Peers']} path={"/media/"}/>);
+                searchResults.push(<MovieTile key={i} isTV={this.props.promptTV} link={link} title={item['Title']} seeders={item['Seeders']} leechers={item['Peers']} path={"/media/"} onError={this.props.onError}/>);
             }
         }
 
@@ -82,9 +86,6 @@ export default class SearchResultBox extends React.Component{
         }
     }
 
-
-
-
     render(){
         var visibleTiles;
         var numberItems = 0;
@@ -106,9 +107,11 @@ export default class SearchResultBox extends React.Component{
             }
         }
 
+        // If there are no tiles, just return empty.
         if(this.state.allTiles.length === 0){
             return ( <></> );
         }
+
         return (
             <div className="BorderBox">
                 <Pagination size='sm'>

@@ -34,6 +34,13 @@ Table{
   table-layout: fixed;
 }
 
+.textCollapse{
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+  word-break: break-word;
+}
+
 .MovieTitle{
   word-wrap: break-word;
   max-width: 100px;
