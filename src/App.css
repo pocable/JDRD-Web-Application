@@ -34,8 +34,11 @@ Table{
   table-layout: fixed;
 }
 
-.DownloadMonitorItem{
+.textCollapse{
+  overflow-wrap: break-word;
   word-wrap: break-word;
+  word-break: break-all;
+  word-break: break-word;
 }
 
 .MovieTitle{

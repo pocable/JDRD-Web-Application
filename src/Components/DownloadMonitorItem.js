@@ -96,7 +96,7 @@ export default class DownloadMonitorItem extends React.Component{
                         </Modal.Footer>
                     </Modal>
                     <td className="MovieTitle">{this.props.title.replaceAll(".", " ")}</td>
-                    <td>{this.props.path}</td>
+                    <td className="textCollapse">{this.props.path}</td>
                     <td><Button variant="danger" onClick={this.onCancelClicked}><MdCancel /></Button></td>
                 </tr>
         );
