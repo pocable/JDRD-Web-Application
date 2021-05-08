@@ -83,6 +83,7 @@ export default class MovieTile extends React.Component{
      */
     download(path){
         console.log('Title: ' + this.props.title + '\nLink: ' + this.props.link + '\n Submitted to download to path: ' + path);
+        var error = false;
         fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/content', {
             method: 'post',
             headers: new Headers({
@@ -94,11 +95,17 @@ export default class MovieTile extends React.Component{
                 'path': path
             })
         }).then(response => {
+            if(response.status !== 200){
+                error = true;
+            }
             return response.json()
         }).then(data => {
             if(data === JSON.stringify({})){
                 console.error(data);
                 this.props.onError('Error with Item', 'Failed to convert the movie to JSON. This could be the sign of an incorrect jackett setup. Try another torrent or check your torrents.')
+            }
+            if(error === true){
+                this.props.onError('Error with Item', 'Error returned from DLAPI\n' + data["Error"])
             }
         }).catch(exp => {
             console.error(exp);
