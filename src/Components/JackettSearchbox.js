@@ -1,6 +1,5 @@
 import React from 'react';
 import {Form, Button} from 'react-bootstrap';
-import MovieTile from './MovieTile'
 import PropTypes from 'prop-types'
 
 /**
@@ -51,9 +50,8 @@ export default class JackettSearchbox extends React.Component{
 
         // If a magnet link is added, do not search and report it.
         if(this.state.formSearchQuery.startsWith("magnet:?")){
-            var links = [<MovieTile key='magnet' isTV={false} link={this.state.formSearchQuery} title={'Movie Magnet: ' + this.state.formSearchQuery.substring(20, 60)}  path={"/media/"} />, 
-                <MovieTile key='magnet' isTV={true} link={this.state.formSearchQuery} title={'TV Magnet: ' + this.state.formSearchQuery.substring(20, 60)}  path={"/media/"} />]
-            this.setState({'searchDisabled': false, 'searchResults': [((this.state.tvCheckbox === 'on') ? links[1] : links[0])]});
+            this.setState({'searchDisabled': false})
+            this.props.jsonCallback([{"MagnetUri": this.state.formSearchQuery, "Title": "Custom Magnet Link", "Seeders": 0, "Peers": 0}]);
             return;
         }
 
