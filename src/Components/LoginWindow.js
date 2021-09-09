@@ -81,7 +81,9 @@ export default class LoginWindow extends React.Component{
                                 <input name="pass" type="password" className="form-control" placeholder="User Key / API Key" value={this.state.apiKey} onChange={this.onAPIKeyChanged} autoComplete="off"/>
                             </Form.Group>
                             {this.state.incorrectPassText && <p style={{color: "red"}}>{this.state.errorMessage}</p>}
-                            <Button variant="success" onClick={this.onSubmit} disabled={this.state.loginDisabled} style={{position: "absolute", bottom: "10px", marginLeft: "auto", marginRight: "auto", left: 0, right: 0, textAlign: "center"}}>Login</Button>
+                            <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+                                <Button variant="success" onClick={this.onSubmit} disabled={this.state.loginDisabled} style={{position: "absolute", bottom: "10px", justifyContent: "center"}}>Login</Button>
+                            </div>
                         </Form>
                     </Card.Body>
                 </Card>
