@@ -50,8 +50,8 @@ export default class JackettSearchbox extends React.Component{
 
         // If a magnet link is added, do not search and report it.
         if(this.state.formSearchQuery.startsWith("magnet:?")){
+            this.props.jsonCallback([{"MagnetUri": this.state.formSearchQuery, "Title": "Custom Magnet Link (" + this.state.formSearchQuery.substring(20, 25) + ")", "Seeders": 0, "Peers": 0}]);
             this.setState({'searchDisabled': false})
-            this.props.jsonCallback([{"MagnetUri": this.state.formSearchQuery, "Title": "Custom Magnet Link", "Seeders": 0, "Peers": 0}]);
             return;
         }
 
@@ -60,8 +60,7 @@ export default class JackettSearchbox extends React.Component{
         if(this.state.movieCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.movieCategories);}
         if(this.state.tvCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.tvCategories);}
         if(this.state.unrestrictCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.unrestrictCategories);}
-
-        var query_url = window._env_.REACT_APP_DLAPI_LINK + "api/v1/jackett/search?query=" + encodeURIComponent(this.state.formSearchQuery) + "&categories=" + chosenCategories.join(',');
+        var query_url = window._env_.REACT_APP_DLAPI_LINK + "api/v1/jackett/search?query=" + encodeURIComponent(this.state.formSearchQuery.trim()) + "&categories=" + chosenCategories.join(',');
         // Contact DLAPI to search jackett. Removes the API keys from the front of the software.
         fetch(query_url, {
             headers: new Headers({

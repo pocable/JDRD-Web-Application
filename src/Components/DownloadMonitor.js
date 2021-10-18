@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import {Table} from 'react-bootstrap';
 import DownloadMonitorItem from './DownloadMonitorItem';
+import {getCookie} from '../Utils/CookieLib';
 
 /**
  * List display of items currently being downloaded by DLAPI.
@@ -60,6 +61,10 @@ export default class DownloadMonitor extends React.Component{
                 }
                 this.setState({'curDownload': items});
         }).catch(_ => {
+            // Do not display the error below if the cookie is expired.
+            var api_key = getCookie("DLAPI_KEY");
+            if(api_key === "") { return; }
+
             this.props.onError('Failed to Connect', 'DLAPI could not be reached to update currently downloading list. Please try again later.')
 
         });

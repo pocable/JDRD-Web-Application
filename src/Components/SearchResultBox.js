@@ -20,7 +20,7 @@ export default class SearchResultBox extends React.Component{
         onError: PropTypes.func
     }
 
-    state = {pageIndex: 0, lastPropLength: 0, allTiles: []}
+    state = {pageIndex: 0, lastJackettJson: "", allTiles: []}
 
     maxDisplaySize = 50;
     maxPaginationSize = 10;
@@ -34,8 +34,8 @@ export default class SearchResultBox extends React.Component{
     }
 
     componentDidUpdate(){
-        if (this.props.jackettJson.length !== this.state.lastPropLength) {
-            this.setState({pageIndex: 0, lastPropLength: this.props.jackettJson.length, allTiles: this.buildTiles()})
+        if (this.props.jackettJson !== this.state.lastJackettJson) {
+            this.setState({pageIndex: 0, lastJackettJson: this.props.jackettJson, allTiles: this.buildTiles()})
         }
     }
 
@@ -65,7 +65,6 @@ export default class SearchResultBox extends React.Component{
         searchResults = searchResults.sort(function(a, b){ return a.props.seeders - b.props.seeders; }).reverse();
         return searchResults;
     }
-
 
     onPageinationChange(event){
         if(event.target.text !== undefined){
