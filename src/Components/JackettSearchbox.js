@@ -60,8 +60,7 @@ export default class JackettSearchbox extends React.Component{
         if(this.state.movieCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.movieCategories);}
         if(this.state.tvCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.tvCategories);}
         if(this.state.unrestrictCheckbox === 'on'){ chosenCategories = chosenCategories.concat(this.unrestrictCategories);}
-
-        var query_url = window._env_.REACT_APP_DLAPI_LINK + "api/v1/jackett/search?query=" + encodeURIComponent(this.state.formSearchQuery) + "&categories=" + chosenCategories.join(',');
+        var query_url = window._env_.REACT_APP_DLAPI_LINK + "api/v1/jackett/search?query=" + encodeURIComponent(this.state.formSearchQuery.trim()) + "&categories=" + chosenCategories.join(',');
         // Contact DLAPI to search jackett. Removes the API keys from the front of the software.
         fetch(query_url, {
             headers: new Headers({

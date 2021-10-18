@@ -66,7 +66,6 @@ export default class SearchResultBox extends React.Component{
         return searchResults;
     }
 
-
     onPageinationChange(event){
         if(event.target.text !== undefined){
             this.setState({pageIndex: event.target.text - 1});
