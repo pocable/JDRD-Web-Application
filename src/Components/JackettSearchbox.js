@@ -50,8 +50,8 @@ export default class JackettSearchbox extends React.Component{
 
         // If a magnet link is added, do not search and report it.
         if(this.state.formSearchQuery.startsWith("magnet:?")){
+            this.props.jsonCallback([{"MagnetUri": this.state.formSearchQuery, "Title": "Custom Magnet Link (" + this.state.formSearchQuery.substring(20, 25) + ")", "Seeders": 0, "Peers": 0}]);
             this.setState({'searchDisabled': false})
-            this.props.jsonCallback([{"MagnetUri": this.state.formSearchQuery, "Title": "Custom Magnet Link", "Seeders": 0, "Peers": 0}]);
             return;
         }
 
