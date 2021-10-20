@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import {Button} from 'react-bootstrap';
-import MetadataRequestWindow from './MetadataRequestWindow';
-import ConfirmMessage from './ConfirmMessage';
 import {FaCloudDownloadAlt} from 'react-icons/fa'
+import DownloadConfirmation from './DownloadConfirmation';
 
 
 /**
@@ -12,7 +11,7 @@ import {FaCloudDownloadAlt} from 'react-icons/fa'
  */
 export default class MovieTile extends React.Component{
 
-    state = {'askForMeta': false, 'confirmState': false, 'confirmMessage': ''}
+    state = {'askForMeta': false, 'confirmState': false, 'confirmMessage': '', 'metadata': this.extractMetaData()}
 
     static propTypes = {
         /** The main download location path (contains subfolders tv and movies). */
@@ -31,7 +30,7 @@ export default class MovieTile extends React.Component{
         leechers: PropTypes.number,
         
         /** If the displayed item is a TV show or not. */
-        isTv: PropTypes.bool,
+        isTV: PropTypes.bool,
 
         /** On Error call for if there is an issue. */
         onError: PropTypes.func
@@ -39,42 +38,17 @@ export default class MovieTile extends React.Component{
 
     constructor(props){
         super(props);
-        this.downloadWithMeta = this.downloadWithMeta.bind(this);
         this.cancelModal = this.cancelModal.bind(this);
         this.download = this.download.bind(this);
         this.downloadButtonPressed = this.downloadButtonPressed.bind(this);
-        this.onConfirmClicked = this.onConfirmClicked.bind(this);
-        this.onConfirmClosed = this.onConfirmClosed.bind(this);
-    }
-
-    /**
-     * Submit the URL prop for downloading on DLAPI with the tv path.
-     * @param {string} showName The show name.
-     * @param {string} seasonNumber The season number / representation.
-     */
-    downloadWithMeta(showName, seasonNumber){
-
-        // Check if the show name was entered, otherwise show error.
-        if(showName === ''){
-            this.setState({'askForMeta': false, 'errorState': true, 'message': 'TV show name is required to download.'})
-            return;
-        }
-
-        // Check if there is a season number. If empty then we don't need the extra /.
-        if(seasonNumber === ''){
-            this.download(this.props.path + "tv/" + showName + "/")
-        }else{
-            this.download(this.props.path + "tv/" + showName + "/" + seasonNumber + "/")
-        }
-
-        this.setState({'askForMeta': false});
+        this.extractMetaData = this.extractMetaData.bind(this);
     }
 
     /**
      * Close the ask for metadata modal.
      */
     cancelModal(){
-        this.setState({'askForMeta': false});
+        this.setState({'confirmState': false});
     }
 
     /**
@@ -82,7 +56,6 @@ export default class MovieTile extends React.Component{
      * @param {string} path The path provided to download to. 
      */
     download(path){
-        console.log('Title: ' + this.props.title + '\nLink: ' + this.props.link + '\n Submitted to download to path: ' + path);
         var error = false;
         fetch(window._env_.REACT_APP_DLAPI_LINK + 'api/v1/content', {
             method: 'post',
@@ -111,34 +84,25 @@ export default class MovieTile extends React.Component{
             console.error(exp);
             this.props.onError('Error with Item', 'Failed to fetch from DLAPI. DLAPI could be down or the Jackett endpoint does not work. Check console for detailed information.')
         })
+        this.setState({'confirmState': false})
     }
 
     /**
-     * Called when the download button is pressed, depending on if its tv
-     * or movie will display a confirmation window or a MetadataRequestWindow.
+     * Try and extract metadata from the title to place it in a proper folder
+     * @returns boolean if sucessful
+     */
+    extractMetaData(){
+        const ptt = require("parse-torrent-title");
+        const information = ptt.parse(this.props.title);
+        let metaInfo = {title: information.title, year: information.year, season: information.season}
+        return metaInfo;
+    }
+
+    /**
+     * Called when the download button is pressed
      */
     downloadButtonPressed(){
-        if(this.props.isTV){
-            this.setState({'askForMeta': true, 'confirmState': false});
-            return;
-        }
-        this.setState({'confirmState': true, 'confirmMessage': 'Download ' + this.props.title + '?'});
-    }
-
-
-    /**
-     * Called on the confirm button for movies.
-     */
-    onConfirmClicked(){
-        this.download(this.props.path + 'movies/')
-        this.setState({'confirmState': false});
-    }
-
-    /**
-     * Called on the closed button for movies.
-     */
-    onConfirmClosed(){
-        this.setState({'confirmState': false});
+        this.setState({'confirmState': true});
     }
 
 
@@ -146,13 +110,9 @@ export default class MovieTile extends React.Component{
 
         // Can use same var since if its TV it will metadata request else if its a movie its a confirm window.
         var popup;
-        if(this.state.askForMeta){
-            popup = (<MetadataRequestWindow downloadWithMeta={this.downloadWithMeta} cancelModal={this.cancelModal}/>);
-        }
-
-        // If its not TV and we need to display the confirm window, set popup up for display.
-        if(!this.props.isTV && this.state.confirmState){
-            popup = (<ConfirmMessage message={this.state.confirmMessage} onConfirm={this.onConfirmClicked} onCancel={this.onConfirmClosed}/>)
+        if(this.state.confirmState){
+            popup = (<DownloadConfirmation download={this.download} cancelModal={this.cancelModal} isTV={this.props.isTV} title={this.state.metadata.title} year={this.state.metadata.year} season={this.state.metadata.season}
+            path={this.props.path}/>);
         }
 
         return (
