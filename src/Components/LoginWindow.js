@@ -2,7 +2,6 @@ import React from 'react';
 import {Button, Form} from 'react-bootstrap';
 import PropTypes from 'prop-types'
 import {Card} from 'react-bootstrap';
-import {getCookie} from '../Utils/CookieLib';
 
 /**
  * Login window responsible for getting user password input, fetching dlapi key
@@ -59,11 +58,7 @@ export default class LoginWindow extends React.Component{
                 }else if (exp.message === "400"){
                     this.setState({incorrectPassText: true, errorMessage: "Invalid input. Check console for details.", loginDisabled: false});
                 }else{
-                    // Do not display the error below if the cookie is expired.
-                    var api_key = getCookie("DLAPI_KEY");
-                    if(api_key !== "") { 
-                        this.setState({incorrectPassText: true, errorMessage: "Failed to connect to DLAPI.", loginDisabled: false});
-                    }
+                    this.setState({incorrectPassText: true, errorMessage: "Failed to connect to DLAPI.", loginDisabled: false});
                 }
                 console.error(exp)
                 this.setState({loginDisabled: false});

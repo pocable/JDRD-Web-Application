@@ -51,7 +51,16 @@ export default class DownloadMonitor extends React.Component{
                 'Content-Type': 'application/json'
             })
             }).then(response => {
-                if((!response.ok)){ throw new Error('Webpage reported 404, check console for URL.'); }
+                if((!response.ok)){
+                    
+                    // If we fail to authenticate (401), then display nothing
+                    if(response.status === 401) {
+                        console.trace("Download monitor paused since DLAPI returned 401.")
+                        return [];
+                    }
+                    
+                    throw new Error('DownloadMonitor result is not 200.'); 
+                }
                 return response.json();
             }).then(data => {
                 var items = []

@@ -48,7 +48,7 @@ export default class App extends React.Component{
                 'token': window._env_.REACT_APP_DLAPI_API_KEY
             })
         }).then(response => {
-            if((!response.ok)){ this.setState({reqUpdate: true}); console.log();}
+            if((!response.ok)){ this.setState({reqUpdate: true}); }
             return response.json();
         }).then(data => {
             if(!data['is_valid']){

@@ -124,7 +124,7 @@ export default class JackettSearchbox extends React.Component{
                         </Form.Group>
                     </fieldset>
                     <Button variant="primary" type="submit" disabled={this.state.searchDisabled}>
-                        Submit
+                        Search
                     </Button>
                 </Form>
                 <br></br>
