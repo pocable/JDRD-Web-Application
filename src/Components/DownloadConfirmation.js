@@ -79,7 +79,11 @@ export default class DownloadConfirmation extends React.Component{
                 tvPath += "/"
 
                 if(this.state.season && this.state.seasonCheckbox === 'on'){
-                    tvPath += "Season " + this.state.season + "/"
+                    if(isNaN(this.state.season)){
+                        tvPath += this.state.season + "/"
+                    }else{
+                        tvPath += "Season " + parseInt(this.state.season) + "/"
+                    }
                 }
                 return tvPath
 
@@ -132,7 +136,7 @@ export default class DownloadConfirmation extends React.Component{
                             {this.state.seasonCheckbox === 'on' &&
                                 <Form.Group controlId="basicSearch">
                                     <Form.Label>Enter Season Number/Name: </Form.Label>
-                                    <input name="seasonNumber" type="text" className="form-control" autoComplete="off" value={this.state.season} onChange={this.updateSeasonText} placeholder="S01, S02, ..."/>
+                                    <input name="seasonNumber" type="text" className="form-control" autoComplete="off" value={this.state.season} onChange={this.updateSeasonText} placeholder="1, 10, Extras, ..."/>
                                 </Form.Group>
                             }
                             <Form.Label>{(dlLoc) ? "Download Location: " + dlLoc : "Missing required data."}</Form.Label>
